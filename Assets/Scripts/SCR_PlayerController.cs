@@ -11,6 +11,13 @@ public class SCR_PlayerController : MonoBehaviour
     public float walkSpeed = 5f;
     public float sprintSpeed = 12f;
     private float moveSpeed;
+    private string facingDirection = "right";
+
+    [Header("Attack values")]
+    public GameObject lightAttackHB;
+    public float lightAttackDamage;
+    [TooltipAttribute("Distance from the player the hit box is instantiated")]
+    public float hitOrginDistance = 1.0f;
 
     [Header("Jump values")]
     public float initialJumpForce;
@@ -23,6 +30,7 @@ public class SCR_PlayerController : MonoBehaviour
     [Header("Key Binds")]
     public KeyCode sprintButton;
     public KeyCode jumpButton;
+    public KeyCode lightAttackButton;
 
     [Header("Objects")]
     public Rigidbody2D playerRB;
@@ -46,8 +54,26 @@ public class SCR_PlayerController : MonoBehaviour
         JumpCheck();
         Move();
         SprintCheck();
+        if(Input.GetKeyDown(lightAttackButton))
+        {
+            Attack("lightAttack");
+        }
     }
     
+    private void Attack(string attackType)
+    {
+        Debug.Log("Attacking with type: " + attackType);
+        if (attackType == "lightAttack")
+        {
+            float attackPosOffset = 0.0f;
+            if (facingDirection == "right") { attackPosOffset = 1.0f; }
+            if (facingDirection == "left") { attackPosOffset = -1.0f; }
+
+            Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
+            ///////// TO DO: INSTANTIATION ////////////
+        }
+    }
+
     private void GroundedCheck()
     {
         Vector2 down = transform.TransformDirection(Vector2.down) * groundRayCastDistance;
@@ -70,6 +96,14 @@ public class SCR_PlayerController : MonoBehaviour
         if (Mathf.Abs(XInput) > 0)
         {
             playerRB.velocity = new Vector2(XInput * moveSpeed, playerRB.velocity.y);
+            if(XInput <= 0)
+            {
+                facingDirection = "left";
+            }
+            else if (XInput >= 0)
+            {
+                facingDirection = "right";
+            }
         }
     }
 
@@ -77,30 +111,39 @@ public class SCR_PlayerController : MonoBehaviour
     {
         if (isGrounded && Input.GetKeyDown(jumpButton))
         {
+            //Initial jump force
             playerRB.AddForce(transform.up * initialJumpForce, ForceMode2D.Impulse);
             isJumping = true;
             jumpCanContinue = true;
+            //Resets jump timer to track how long jump has lasted
             jumpTimer = 0.0f;
         }
 
+        //if jump should continue if space bar is held
         if (isJumping && Input.GetKey(jumpButton) && jumpCanContinue)
         {
+            //Increments jump timer
             jumpTimer += Time.deltaTime;
+            //If the jump has not continued for too long
             if (jumpTimer < maxJumpDuration)
             {
+                //Add small force to go higher
                 playerRB.AddForce(transform.up * heldJumpForce, ForceMode2D.Force);
             }
             else
             {
+                //If jump has reached max time, this stops it
                 jumpCanContinue = false;
             } 
         }
 
+        //Stops jump early
         if(Input.GetKeyUp(jumpButton))
         {
             jumpCanContinue = false;
         }
 
+        //Resets after jump is finished and player has landed
         if(isGrounded && !Input.GetKey(jumpButton))
         {
             isJumping = false;
