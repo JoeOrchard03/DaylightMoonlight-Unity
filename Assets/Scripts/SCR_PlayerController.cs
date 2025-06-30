@@ -18,6 +18,8 @@ public class SCR_PlayerController : MonoBehaviour
     public float lightAttackDamage;
     [TooltipAttribute("Distance from the player the hit box is instantiated")]
     public float hitOrginDistance = 1.0f;
+    [TooltipAttribute("How long the hitbox will stay spawned for")]
+    public float hitBoxPersistenceDuration = 0.1f;
 
     [Header("Jump values")]
     public float initialJumpForce;
@@ -70,8 +72,20 @@ public class SCR_PlayerController : MonoBehaviour
             if (facingDirection == "left") { attackPosOffset = -1.0f; }
 
             Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
-            ///////// TO DO: INSTANTIATION ////////////
+            GameObject spawnedHitBox = Instantiate(lightAttackHB, HBSpawnPosition, Quaternion.identity);
+            StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
         }
+    }
+
+    private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
+    {
+        yield return new WaitForSeconds(hitBoxPersistenceDuration);
+        DestroyHitBox(hitboxToDelete);
+    }
+
+    private void DestroyHitBox(GameObject hitboxToDelete)
+    {
+        Destroy(hitboxToDelete);
     }
 
     private void GroundedCheck()
