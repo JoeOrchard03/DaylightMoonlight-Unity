@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -10,6 +11,8 @@ public class SCR_PlayerController : MonoBehaviour
     [Header("Movement values")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 12f;
+    [Tooltip("Deadzone stops the player from freezing when quickly changing directions")]
+    public float movementDeadzone = 0.5f;
     private float moveSpeed;
     private string facingDirection = "right";
 
@@ -38,9 +41,11 @@ public class SCR_PlayerController : MonoBehaviour
     public Rigidbody2D playerRB;
 
     [Header("Ground check variables")]
-    public float groundRayCastDistance = 1.25f;
-    public LayerMask groundLayerMask;
     public bool isGrounded = false;
+
+    [Header("Animation variables")]
+    public SpriteRenderer playerSpriteRenderer;
+    public Animator playerAnimator;
 
     [Header("Misc variables")]
     private float startTime;
@@ -52,7 +57,6 @@ public class SCR_PlayerController : MonoBehaviour
 
     void Update()
     {
-        GroundedCheck();
         JumpCheck();
         Move();
         SprintCheck();
@@ -88,35 +92,34 @@ public class SCR_PlayerController : MonoBehaviour
         Destroy(hitboxToDelete);
     }
 
-    private void GroundedCheck()
-    {
-        Vector2 down = transform.TransformDirection(Vector2.down) * groundRayCastDistance;
-        Debug.DrawRay(transform.position, down);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundRayCastDistance, groundLayerMask);
-        if(hit)
-        {
-            isGrounded = true;
-        }
-        else
-        {
-            isGrounded = false;
-        }
-    }
-
     private void Move()
     {
         float XInput = Input.GetAxis("Horizontal");
 
-        if (Mathf.Abs(XInput) > 0)
+        if (Mathf.Abs(XInput) > movementDeadzone)
         {
             playerRB.velocity = new Vector2(XInput * moveSpeed, playerRB.velocity.y);
             if(XInput <= 0)
             {
                 facingDirection = "left";
+                playerSpriteRenderer.flipX = true;
             }
             else if (XInput >= 0)
             {
                 facingDirection = "right";
+                playerSpriteRenderer.flipX = false;
+            }
+
+            if (!playerAnimator.GetBool("IsWalking"))
+            {
+                playerAnimator.SetBool("IsWalking", true);
+            }
+        }
+        else
+        {
+            if (!playerAnimator.GetBool("IsIdle"))
+            {
+                playerAnimator.SetBool("IsWalking", false);
             }
         }
     }
