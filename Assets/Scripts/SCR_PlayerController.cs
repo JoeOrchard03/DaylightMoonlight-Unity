@@ -117,7 +117,7 @@ public class SCR_PlayerController : MonoBehaviour
         }
         else
         {
-            if (!playerAnimator.GetBool("IsIdle"))
+            if (playerAnimator.GetBool("IsWalking"))
             {
                 playerAnimator.SetBool("IsWalking", false);
             }
@@ -172,10 +172,20 @@ public class SCR_PlayerController : MonoBehaviour
         if(Input.GetKey(sprintButton) && isGrounded)
         {
             moveSpeed = sprintSpeed;
+            if (!playerAnimator.GetBool("IsRunning"))
+            {
+                playerAnimator.SetBool("IsRunning", true);
+                playerAnimator.SetBool("IsWalking", false);
+            }
         }
         if(!Input.GetKey(sprintButton) && isGrounded)
         {
             moveSpeed = walkSpeed;
+            if (playerAnimator.GetBool("IsRunning"))
+            {
+                playerAnimator.SetBool("IsRunning", false);
+                playerAnimator.SetBool("IsWalking", true);
+            }
         }
     }
 }

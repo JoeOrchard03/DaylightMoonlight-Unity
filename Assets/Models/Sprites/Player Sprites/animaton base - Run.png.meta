@@ -1,0 +1,414 @@
+fileFormatVersion: 2
+guid: b105b5d03d576dd4c9e111e151c9a452
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7461566597499608858
+    second: animaton base - Run_0
+  - first:
+      213: -780391987729996914
+    second: animaton base - Run_1
+  - first:
+      213: -8103166943173650529
+    second: animaton base - Run_2
+  - first:
+      213: -7707957338330889186
+    second: animaton base - Run_3
+  - first:
+      213: -2956029522173080907
+    second: animaton base - Run_4
+  - first:
+      213: 8233797852997142584
+    second: animaton base - Run_5
+  - first:
+      213: -2264538228361283631
+    second: animaton base - Run_6
+  - first:
+      213: 2354522820715348868
+    second: animaton base - Run_7
+  - first:
+      213: -4178735446922321120
+    second: animaton base - Run_8
+  - first:
+      213: 8703797964615842447
+    second: animaton base - Run_9
+  - first:
+      213: -5342033848674238912
+    second: animaton base - Run_10
+  - first:
+      213: -1036839707905610094
+    second: animaton base - Run_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: animaton base - Run_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2499
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1f52ef894fcc8760800000000000000
+      internalID: 7461566597499608858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_1
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 2499
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e83eac13f9d7b25f0800000000000000
+      internalID: -780391987729996914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_2
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 2499
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f97527cf894cb8f80800000000000000
+      internalID: -8103166943173650529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1666
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e140ce8a3a5d70590800000000000000
+      internalID: -7707957338330889186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_4
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 1666
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ba4e41bfc21af6d0800000000000000
+      internalID: -2956029522173080907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_5
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1666
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 838c444d583544270800000000000000
+      internalID: 8233797852997142584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 833
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d7bb36ba7eb290e0800000000000000
+      internalID: -2264538228361283631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_7
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 833
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4830a48d702fca020800000000000000
+      internalID: 2354522820715348868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_8
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 833
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 023acdb30462206c0800000000000000
+      internalID: -4178735446922321120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8af1b5522a1ac870800000000000000
+      internalID: 8703797964615842447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_10
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04eb8a794884dd5b0800000000000000
+      internalID: -5342033848674238912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton base - Run_11
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 832
+        height: 829
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29e244177c76c91f0800000000000000
+      internalID: -1036839707905610094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 3419961ce060b4349b417be655c9aa7f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      animaton base - Run_0: 7461566597499608858
+      animaton base - Run_1: -780391987729996914
+      animaton base - Run_10: -5342033848674238912
+      animaton base - Run_11: -1036839707905610094
+      animaton base - Run_2: -8103166943173650529
+      animaton base - Run_3: -7707957338330889186
+      animaton base - Run_4: -2956029522173080907
+      animaton base - Run_5: 8233797852997142584
+      animaton base - Run_6: -2264538228361283631
+      animaton base - Run_7: 2354522820715348868
+      animaton base - Run_8: -4178735446922321120
+      animaton base - Run_9: 8703797964615842447
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
