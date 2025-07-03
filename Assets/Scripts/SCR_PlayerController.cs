@@ -18,10 +18,10 @@ public class SCR_PlayerController : MonoBehaviour
     private bool isMoving = false;
 
     [Header("Attack values")]
-    public GameObject lightAttackHB;
+    public GameObject lightAttackHb;
     public float lightAttackDamage;
     [TooltipAttribute("Distance from the player the hit box is instantiated")]
-    public float hitOrginDistance = 1.0f;
+    public float hitOriginDistance = 1.0f;
     [TooltipAttribute("How long the hitbox will stay spawned for")]
     public float hitBoxPersistenceDuration = 0.1f;
 
@@ -39,7 +39,7 @@ public class SCR_PlayerController : MonoBehaviour
     public KeyCode lightAttackButton;
 
     [Header("Objects")]
-    public Rigidbody2D playerRB;
+    public Rigidbody2D playerRb;
 
     [Header("Ground check variables")]
     public bool isGrounded = false;
@@ -70,16 +70,14 @@ public class SCR_PlayerController : MonoBehaviour
     private void Attack(string attackType)
     {
         Debug.Log("Attacking with type: " + attackType);
-        if (attackType == "lightAttack")
-        {
-            float attackPosOffset = 0.0f;
-            if (facingDirection == "right") { attackPosOffset = 1.0f; }
-            if (facingDirection == "left") { attackPosOffset = -1.0f; }
+        if (attackType != "lightAttack") return;
+        float attackPosOffset = 0.0f;
+        if (facingDirection == "right") { attackPosOffset = 1.0f; }
+        if (facingDirection == "left") { attackPosOffset = -1.0f; }
 
-            Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
-            GameObject spawnedHitBox = Instantiate(lightAttackHB, HBSpawnPosition, Quaternion.identity);
-            StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
-        }
+        Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
+        GameObject spawnedHitBox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);
+        StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
     }
 
     private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
@@ -99,7 +97,7 @@ public class SCR_PlayerController : MonoBehaviour
 
         if (Mathf.Abs(XInput) > movementDeadzone)
         {
-            playerRB.velocity = new Vector2(XInput * moveSpeed, playerRB.velocity.y);
+            playerRb.velocity = new Vector2(XInput * moveSpeed, playerRb.velocity.y);
             isMoving = true;
             if(XInput <= 0)
             {
@@ -133,7 +131,7 @@ public class SCR_PlayerController : MonoBehaviour
         if (isGrounded && Input.GetKeyDown(jumpButton))
         {
             //Initial jump force
-            playerRB.AddForce(transform.up * initialJumpForce, ForceMode2D.Impulse);
+            playerRb.AddForce(transform.up * initialJumpForce, ForceMode2D.Impulse);
             isJumping = true;
             jumpCanContinue = true;
             //Resets jump timer to track how long jump has lasted
@@ -149,7 +147,7 @@ public class SCR_PlayerController : MonoBehaviour
             if (jumpTimer < maxJumpDuration)
             {
                 //Add small force to go higher
-                playerRB.AddForce(transform.up * heldJumpForce, ForceMode2D.Force);
+                playerRb.AddForce(transform.up * heldJumpForce, ForceMode2D.Force);
             }
             else
             {
