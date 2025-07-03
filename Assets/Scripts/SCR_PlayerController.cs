@@ -15,6 +15,7 @@ public class SCR_PlayerController : MonoBehaviour
     public float movementDeadzone = 0.5f;
     private float moveSpeed;
     private string facingDirection = "right";
+    private bool isMoving = false;
 
     [Header("Attack values")]
     public GameObject lightAttackHB;
@@ -99,6 +100,7 @@ public class SCR_PlayerController : MonoBehaviour
         if (Mathf.Abs(XInput) > movementDeadzone)
         {
             playerRB.velocity = new Vector2(XInput * moveSpeed, playerRB.velocity.y);
+            isMoving = true;
             if(XInput <= 0)
             {
                 facingDirection = "left";
@@ -117,9 +119,11 @@ public class SCR_PlayerController : MonoBehaviour
         }
         else
         {
-            if (playerAnimator.GetBool("IsWalking"))
+            isMoving = false;
+            if (playerAnimator.GetBool("IsWalking") || playerAnimator.GetBool("IsRunning"))
             {
                 playerAnimator.SetBool("IsWalking", false);
+                playerAnimator.SetBool("IsRunning", false);
             }
         }
     }
@@ -172,7 +176,7 @@ public class SCR_PlayerController : MonoBehaviour
         if(Input.GetKey(sprintButton) && isGrounded)
         {
             moveSpeed = sprintSpeed;
-            if (!playerAnimator.GetBool("IsRunning"))
+            if (!playerAnimator.GetBool("IsRunning") && isMoving)
             {
                 playerAnimator.SetBool("IsRunning", true);
                 playerAnimator.SetBool("IsWalking", false);
@@ -181,7 +185,7 @@ public class SCR_PlayerController : MonoBehaviour
         if(!Input.GetKey(sprintButton) && isGrounded)
         {
             moveSpeed = walkSpeed;
-            if (playerAnimator.GetBool("IsRunning"))
+            if (playerAnimator.GetBool("IsRunning") && isMoving)
             {
                 playerAnimator.SetBool("IsRunning", false);
                 playerAnimator.SetBool("IsWalking", true);
