@@ -6,12 +6,19 @@ public class SCR_Enemy : MonoBehaviour
 {
     public float maxHealth;
     public float health;
+    public GameObject playerRef;
 
     private void Start()
     {
         health = maxHealth;
+        playerRef = GameObject.FindGameObjectWithTag("Player");
     }
 
+    private void ApproachPlayer()
+    {
+        //
+    }
+    
     public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
