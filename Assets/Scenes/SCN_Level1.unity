@@ -1218,10 +1218,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PRE_Soldier
       objectReference: {fileID: 0}
-    - target: {fileID: 2069323344680413038, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
-      propertyPath: m_Radius
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 2708506016956767706, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
       propertyPath: playerRef
       value: 
@@ -1265,10 +1261,6 @@ PrefabInstance:
     - target: {fileID: 4822223305464056863, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6459144385035949701, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
