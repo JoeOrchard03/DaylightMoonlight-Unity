@@ -1,13 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
+using Debug = UnityEngine.Debug;
 
 public class SCR_PlayerController : MonoBehaviour
 {
+    private static readonly int IsRunning = Animator.StringToHash("IsRunning");
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+
     [Header("Movement values")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 12f;
@@ -17,6 +22,10 @@ public class SCR_PlayerController : MonoBehaviour
     private string facingDirection = "right";
     private bool isMoving = false;
 
+    [Header("Health values")]
+    public float maxHealth = 100f; 
+    public float currentHealth;
+    
     [Header("Attack values")]
     public GameObject lightAttackHb;
     public float lightAttackDamage;
@@ -54,9 +63,10 @@ public class SCR_PlayerController : MonoBehaviour
     private void Start()
     {
         moveSpeed = walkSpeed;
+        currentHealth = maxHealth;
     }
 
-    void Update()
+    private void Update()
     {
         JumpCheck();
         Move();
@@ -71,9 +81,12 @@ public class SCR_PlayerController : MonoBehaviour
     {
         Debug.Log("Attacking with type: " + attackType);
         if (attackType != "lightAttack") return;
-        float attackPosOffset = 0.0f;
-        if (facingDirection == "right") { attackPosOffset = 1.0f; }
-        if (facingDirection == "left") { attackPosOffset = -1.0f; }
+        float attackPosOffset = facingDirection switch
+        {
+            "right" => 1.0f,
+            "left" => -1.0f,
+            _ => 0.0f
+        };
 
         Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
         GameObject spawnedHitBox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);
@@ -83,11 +96,6 @@ public class SCR_PlayerController : MonoBehaviour
     private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
     {
         yield return new WaitForSeconds(hitBoxPersistenceDuration);
-        DestroyHitBox(hitboxToDelete);
-    }
-
-    private void DestroyHitBox(GameObject hitboxToDelete)
-    {
         Destroy(hitboxToDelete);
     }
 
@@ -99,30 +107,29 @@ public class SCR_PlayerController : MonoBehaviour
         {
             playerRb.velocity = new Vector2(XInput * moveSpeed, playerRb.velocity.y);
             isMoving = true;
-            if(XInput <= 0)
+            switch (XInput)
             {
-                facingDirection = "left";
-                playerSpriteRenderer.flipX = true;
-            }
-            else if (XInput >= 0)
-            {
-                facingDirection = "right";
-                playerSpriteRenderer.flipX = false;
+                case <= 0:
+                    facingDirection = "left";
+                    playerSpriteRenderer.flipX = true;
+                    break;
+                case >= 0:
+                    facingDirection = "right";
+                    playerSpriteRenderer.flipX = false;
+                    break;
             }
 
-            if (!playerAnimator.GetBool("IsWalking"))
+            if (!playerAnimator.GetBool(IsWalking))
             {
-                playerAnimator.SetBool("IsWalking", true);
+                playerAnimator.SetBool(IsWalking, true);
             }
         }
         else
         {
             isMoving = false;
-            if (playerAnimator.GetBool("IsWalking") || playerAnimator.GetBool("IsRunning"))
-            {
-                playerAnimator.SetBool("IsWalking", false);
-                playerAnimator.SetBool("IsRunning", false);
-            }
+            if (!playerAnimator.GetBool(IsWalking) && !playerAnimator.GetBool(IsRunning)) return;
+            playerAnimator.SetBool(IsWalking, false);
+            playerAnimator.SetBool(IsRunning, false);
         }
     }
 
@@ -174,20 +181,25 @@ public class SCR_PlayerController : MonoBehaviour
         if(Input.GetKey(sprintButton) && isGrounded)
         {
             moveSpeed = sprintSpeed;
-            if (!playerAnimator.GetBool("IsRunning") && isMoving)
+            if (!playerAnimator.GetBool(IsRunning) && isMoving)
             {
-                playerAnimator.SetBool("IsRunning", true);
-                playerAnimator.SetBool("IsWalking", false);
+                playerAnimator.SetBool(IsRunning, true);
+                playerAnimator.SetBool(IsWalking, false);
             }
         }
-        if(!Input.GetKey(sprintButton) && isGrounded)
-        {
-            moveSpeed = walkSpeed;
-            if (playerAnimator.GetBool("IsRunning") && isMoving)
-            {
-                playerAnimator.SetBool("IsRunning", false);
-                playerAnimator.SetBool("IsWalking", true);
-            }
-        }
+
+        if (Input.GetKey(sprintButton) || !isGrounded) return;
+        moveSpeed = walkSpeed;
+        if (!playerAnimator.GetBool(IsRunning) || !isMoving) return;
+        playerAnimator.SetBool(IsRunning, false);
+        playerAnimator.SetBool(IsWalking, true);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        if (!(currentHealth <= 0)) return;
+        Debug.Log("Player has died");
+        Destroy(this.gameObject);
     }
 }

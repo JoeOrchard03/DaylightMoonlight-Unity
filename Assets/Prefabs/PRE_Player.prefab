@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 3914684752140900404}
   - component: {fileID: 1569378567684486573}
   - component: {fileID: 3108970934884017415}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PRE_Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -136,7 +136,9 @@ MonoBehaviour:
   walkSpeed: 5
   sprintSpeed: 12
   movementDeadzone: 0.05
-  lightAttackHb: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 0
+  lightAttackHb: {fileID: 7287187850623337726, guid: f7058faa935010249b5c6cb0bc5531c0, type: 3}
   lightAttackDamage: 10
   hitOriginDistance: 1
   hitBoxPersistenceDuration: 0.1
@@ -146,7 +148,7 @@ MonoBehaviour:
   sprintButton: 304
   jumpButton: 32
   lightAttackButton: 323
-  playerRb: {fileID: 0}
+  playerRb: {fileID: 3914684752140900404}
   isGrounded: 0
   playerSpriteRenderer: {fileID: 5744925949418452398}
   playerAnimator: {fileID: 3108970934884017415}

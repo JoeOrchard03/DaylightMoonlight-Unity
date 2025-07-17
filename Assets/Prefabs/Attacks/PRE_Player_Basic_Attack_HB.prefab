@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6798532726946944871}
   - component: {fileID: 3367142775637012809}
   m_Layer: 7
-  m_Name: PRE_Swipe_attack_HB
+  m_Name: PRE_Player_Basic_Attack_HB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
