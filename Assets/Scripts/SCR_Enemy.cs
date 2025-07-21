@@ -81,8 +81,8 @@ public class SCR_Enemy : MonoBehaviour
     {
         isAttacking = true;
         StartCoroutine(AttackCooldown());
-        spriteRenderer.color = enemyAttackingColor;
         canMove = false;
+        spriteRenderer.color = enemyAttackingColor;
         yield return new WaitForSecondsRealtime(attackWindUpTime);
         spriteRenderer.color = enemyColor;
         if(soldierScriptRef) {soldierScriptRef.Attack(attackDirection);}
@@ -100,9 +100,8 @@ public class SCR_Enemy : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.gameObject.transform.root.gameObject.CompareTag("Player")) return;
         playerInRange = true;
-        Debug.Log("Player has entered attack range");
         if(attackOnCooldown || isAttacking) {return;}
         StartCoroutine(AttackWindUp());
     }

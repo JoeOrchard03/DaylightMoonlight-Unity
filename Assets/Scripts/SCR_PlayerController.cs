@@ -12,6 +12,9 @@ public class SCR_PlayerController : MonoBehaviour
 {
     private static readonly int IsRunning = Animator.StringToHash("IsRunning");
     private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+    private static readonly int isFalling = Animator.StringToHash("IsFalling");
+    private static readonly int Jump = Animator.StringToHash("Jump");
+    private static readonly int Land = Animator.StringToHash("Land");
 
     [Header("Movement values")]
     public float walkSpeed = 5f;
@@ -94,6 +97,17 @@ public class SCR_PlayerController : MonoBehaviour
         StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
     }
 
+    public void FallingTrigger()
+    {
+        playerAnimator.SetBool(isFalling, true);
+    }
+
+    public void LandingTrigger()
+    {
+        playerAnimator.SetBool(isFalling, false);
+        playerAnimator.SetTrigger(Land);
+    }
+    
     private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
     {
         yield return new WaitForSeconds(hitBoxPersistenceDuration);
@@ -139,6 +153,7 @@ public class SCR_PlayerController : MonoBehaviour
         if (isGrounded && Input.GetKeyDown(jumpButton))
         {
             //Initial jump force
+            playerAnimator.SetTrigger(Jump);
             playerRb.AddForce(transform.up * initialJumpForce, ForceMode2D.Impulse);
             isJumping = true;
             jumpCanContinue = true;
