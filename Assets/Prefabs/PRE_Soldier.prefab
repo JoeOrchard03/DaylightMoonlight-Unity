@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4822223305464056863}
+  - component: {fileID: 2708506016956767706}
+  - component: {fileID: 3505788748124146924}
   - component: {fileID: 6536810961042260860}
   - component: {fileID: 2121044187092986549}
   - component: {fileID: 3248311231260172583}
-  - component: {fileID: 2708506016956767706}
   - component: {fileID: 6459144385035949701}
   - component: {fileID: 2069323344680413038}
-  - component: {fileID: 3505788748124146924}
   m_Layer: 8
   m_Name: PRE_Soldier
   m_TagString: Untagged
@@ -38,6 +38,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2708506016956767706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903926126268787287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ba26b0bb5beab246a4ec4b90132d825, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 40
+  health: 0
+  playerRef: {fileID: 0}
+  navAgentRef: {fileID: 6459144385035949701}
+  facingDirection: 
+  attackWindUpTime: 1
+  attackCooldown: 2
+  attackOnCooldown: 0
+  attackDirection: 
+  isAttacking: 0
+  playerInRange: 0
+  soldierScriptRef: {fileID: 3505788748124146924}
+  enemyColor: {r: 1, g: 0.41176474, b: 0, a: 1}
+  enemyAttackingColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &3505788748124146924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903926126268787287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbd4914ec51c524db380964de0df222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basicAttackHB: {fileID: 7287187850623337726, guid: 2f889bfb515ce9146b472cdc95e4abb2, type: 3}
+  hitBoxPersistenceDuration: 0.5
 --- !u!50 &6536810961042260860
 Rigidbody2D:
   serializedVersion: 4
@@ -156,30 +196,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &2708506016956767706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 903926126268787287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ba26b0bb5beab246a4ec4b90132d825, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 40
-  health: 0
-  playerRef: {fileID: 0}
-  navAgentRef: {fileID: 6459144385035949701}
-  facingDirection: 
-  attackWindUpTime: 1
-  attackCooldown: 2
-  attackOnCooldown: 0
-  attackDirection: 
-  soldierScriptRef: {fileID: 3505788748124146924}
-  enemyColor: {r: 1, g: 0.41176474, b: 0, a: 1}
-  enemyAttackingColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!195 &6459144385035949701
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -238,17 +254,3 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 2
---- !u!114 &3505788748124146924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 903926126268787287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efbd4914ec51c524db380964de0df222, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basicAttackHB: {fileID: 7287187850623337726, guid: 2f889bfb515ce9146b472cdc95e4abb2, type: 3}
-  hitBoxPersistenceDuration: 0.5

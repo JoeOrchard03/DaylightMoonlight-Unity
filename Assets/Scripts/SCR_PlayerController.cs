@@ -58,6 +58,7 @@ public class SCR_PlayerController : MonoBehaviour
     public Animator playerAnimator;
 
     [Header("Misc variables")]
+    public GameObject GameOverScreen;
     private float startTime;
 
     private void Start()
@@ -200,6 +201,14 @@ public class SCR_PlayerController : MonoBehaviour
         currentHealth -= damage;
         if (!(currentHealth <= 0)) return;
         Debug.Log("Player has died");
+        Die();
+    }
+
+    public void Die()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        GameOverScreen.SetActive(true);
         Destroy(this.gameObject);
     }
 }

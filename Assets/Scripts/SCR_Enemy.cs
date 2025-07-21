@@ -23,7 +23,8 @@ public class SCR_Enemy : MonoBehaviour
     [SerializeField] private float attackCooldown;
     [SerializeField] private bool attackOnCooldown = false;
     [SerializeField] private string attackDirection;
-    private bool isAttacking = false;   
+    public bool isAttacking = false;
+    public bool playerInRange = false;
     
     [Header("Sub enemy scripts")]
     public SCR_Soldier soldierScriptRef;
@@ -45,6 +46,7 @@ public class SCR_Enemy : MonoBehaviour
     private void Update()
     {
         if(!canMove) return;
+        if (!playerRef) return;
         ApproachPlayer();
     }
     
@@ -92,14 +94,21 @@ public class SCR_Enemy : MonoBehaviour
         attackOnCooldown = true;
         yield return new WaitForSecondsRealtime(attackCooldown);
         attackOnCooldown = false;
+        if(playerInRange) { StartCoroutine(AttackWindUp()); }
         canMove = true;
     }
     
     private void OnTriggerStay2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
+        playerInRange = true;
         Debug.Log("Player has entered attack range");
         if(attackOnCooldown || isAttacking) {return;}
         StartCoroutine(AttackWindUp());
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        playerInRange = false;
     }
 }
