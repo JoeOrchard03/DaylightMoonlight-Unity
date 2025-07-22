@@ -1957,26 +1957,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1106468894585693232, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: cameraOBJ
       value: 
       objectReference: {fileID: 519420028}
     - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
-      propertyPath: heldJumpForce
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: GameOverScreen
       value: 
       objectReference: {fileID: 1325678999}
-    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
-      propertyPath: initialJumpForce
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 6117404834861754333, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: m_Name
       value: PRE_Player

@@ -12,8 +12,9 @@ public class SCR_PlayerController : MonoBehaviour
 {
     private static readonly int IsRunning = Animator.StringToHash("IsRunning");
     private static readonly int IsWalking = Animator.StringToHash("IsWalking");
-    private static readonly int isFalling = Animator.StringToHash("IsFalling");
-    private static readonly int Jump = Animator.StringToHash("Jump");
+    public static readonly int IsFalling = Animator.StringToHash("IsFalling");
+    private static readonly int IsJumping = Animator.StringToHash("IsJumping");
+    private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
     private static readonly int Land = Animator.StringToHash("Land");
 
     [Header("Movement values")]
@@ -44,7 +45,7 @@ public class SCR_PlayerController : MonoBehaviour
     private bool jumpCanContinue = true;
     private float jumpTimer = 0.0f;
     private bool isJumping = false;
-
+    
     [Header("Key Binds")]
     public KeyCode sprintButton;
     public KeyCode jumpButton;
@@ -55,6 +56,8 @@ public class SCR_PlayerController : MonoBehaviour
 
     [Header("Ground check variables")]
     public bool isGrounded = false;
+
+    private bool isGroundedPrevFrame;
 
     [Header("Animation variables")]
     public SpriteRenderer playerSpriteRenderer;
@@ -80,6 +83,7 @@ public class SCR_PlayerController : MonoBehaviour
         Move();
         Sprint();
         CameraFollow();
+        HandleAnimations();
         if(Input.GetKeyDown(lightAttackButton))
         {
             Attack("lightAttack");
@@ -91,8 +95,55 @@ public class SCR_PlayerController : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        //Detects whether the player was grounded in the last frame or not, used for landing anim
+        isGroundedPrevFrame = isGrounded;
+    }
+    
     #region Movement
 
+    private void HandleAnimations()
+    {
+        //Sets is grounded in the animator
+        playerAnimator.SetBool(IsGrounded, isGrounded);
+
+        switch (isGrounded)
+        {
+            //If the player is not grounded and going up
+            case false when playerRb.velocity.y > 0:
+                //Play jump anim
+                playerAnimator.SetBool(IsJumping, true);
+                //Stop falling anim
+                playerAnimator.SetBool(IsFalling, false);
+                break;
+            
+            //If the player is not grounded and going down
+            case false when playerRb.velocity.y < 0:
+                //Stop jump anim
+                playerAnimator.SetBool(IsJumping, false);
+                //Play falling anim
+                playerAnimator.SetBool(IsFalling, true);
+                break;
+            
+            //If the player is grounded
+            case true:
+            {
+                //If the player just landed
+                if (!isGroundedPrevFrame && isGrounded)
+                {
+                    //Play landing anim
+                    playerAnimator.SetTrigger(Land);
+                }
+            
+                //Set jumping and falling to false
+                playerAnimator.SetBool(IsJumping, false);
+                playerAnimator.SetBool(IsFalling, false);
+                break;
+            }
+        }
+    }
+    
     private void Move()
     {
         //Get input from A and D keys
@@ -131,19 +182,6 @@ public class SCR_PlayerController : MonoBehaviour
             playerAnimator.SetBool(IsRunning, false);
         }
     }
-
-    //Plays falling animation
-    public void FallingTrigger()
-    {
-        playerAnimator.SetBool(isFalling, true);
-    }
-
-    //Plays landing animation
-    public void LandingTrigger()
-    {
-        playerAnimator.SetBool(isFalling, false);
-        playerAnimator.SetTrigger(Land);
-    }
     
     //Handles jump logic
     private void JumpCheck()
@@ -151,7 +189,8 @@ public class SCR_PlayerController : MonoBehaviour
         if (isGrounded && Input.GetKeyDown(jumpButton))
         {
             //Initial jump force
-            playerAnimator.SetTrigger(Jump);
+            Debug.Log("jump animation being triggered");
+            // playerAnimator.SetBool(IsJumping, true);
             playerRb.AddForce(transform.up * initialJumpForce, ForceMode2D.Impulse);
             isJumping = true;
             //If the jump has not lasted too long, player can continue to hold space to go higher
@@ -220,7 +259,6 @@ public class SCR_PlayerController : MonoBehaviour
     //Handles attack logic
     private void Attack(string attackType)
     {
-        Debug.Log("Attacking with type: " + attackType);
         if (attackType != "lightAttack") return;
         //Gets direction to choose an offset for attack direction
         float attackPosOffset = facingDirection switch

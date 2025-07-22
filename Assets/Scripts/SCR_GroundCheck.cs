@@ -19,7 +19,7 @@ public class SCR_GroundCheck : MonoBehaviour
         Debug.Log("Grounded");
         playerScriptRef.isGrounded = true;
         //Triggers landing animation after player becomes grounded
-        playerScriptRef.LandingTrigger();
+        //playerScriptRef.LandingTrigger();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -28,6 +28,6 @@ public class SCR_GroundCheck : MonoBehaviour
         Debug.Log("Not grounded");
         playerScriptRef.isGrounded = false;
         //Triggers falling animation after player is no longer grounded
-        playerScriptRef.FallingTrigger();
+        //playerScriptRef.FallingTrigger();
     }
 }
