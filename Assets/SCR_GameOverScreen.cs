@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class SCR_GameOverScreen : MonoBehaviour
 {
-    // Start is called before the first frame update
     public void Respawn()
     {
+        //Reloads the scene
         Debug.Log("Respawning");
         var currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);

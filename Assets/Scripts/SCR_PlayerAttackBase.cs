@@ -7,6 +7,7 @@ public class SCR_PlayerAttackBase : MonoBehaviour
     public float damage;
     public LayerMask enemyLayer;
 
+    //Deals damage to any enemies hit
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (((1 << other.gameObject.layer) & enemyLayer) == 0) return;

@@ -18,6 +18,7 @@ public class SCR_GroundCheck : MonoBehaviour
         if (((1 << collision.gameObject.layer) & groundLayer) == 0) return;
         Debug.Log("Grounded");
         playerScriptRef.isGrounded = true;
+        //Triggers landing animation after player becomes grounded
         playerScriptRef.LandingTrigger();
     }
 
@@ -26,6 +27,7 @@ public class SCR_GroundCheck : MonoBehaviour
         if (((1 << collision.gameObject.layer) & groundLayer) == 0) return;
         Debug.Log("Not grounded");
         playerScriptRef.isGrounded = false;
+        //Triggers falling animation after player is no longer grounded
         playerScriptRef.FallingTrigger();
     }
 }

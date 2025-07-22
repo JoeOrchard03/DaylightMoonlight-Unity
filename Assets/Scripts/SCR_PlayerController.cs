@@ -60,6 +60,10 @@ public class SCR_PlayerController : MonoBehaviour
     public SpriteRenderer playerSpriteRenderer;
     public Animator playerAnimator;
 
+    [Header("Camera variables")] 
+    public GameObject cameraOBJ;
+    private bool cameraFollow = true;
+    
     [Header("Misc variables")]
     public GameObject GameOverScreen;
     private float startTime;
@@ -74,56 +78,34 @@ public class SCR_PlayerController : MonoBehaviour
     {
         JumpCheck();
         Move();
-        SprintCheck();
+        Sprint();
+        CameraFollow();
         if(Input.GetKeyDown(lightAttackButton))
         {
             Attack("lightAttack");
         }
-    }
-    
-    private void Attack(string attackType)
-    {
-        Debug.Log("Attacking with type: " + attackType);
-        if (attackType != "lightAttack") return;
-        float attackPosOffset = facingDirection switch
+        if (cameraFollow)
         {
-            "right" => 1.0f,
-            "left" => -1.0f,
-            _ => 0.0f
-        };
-
-        Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
-        GameObject spawnedHitBox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);
-        StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
+            //Follow the player with the camera
+            CameraFollow();
+        }
     }
 
-    public void FallingTrigger()
-    {
-        playerAnimator.SetBool(isFalling, true);
-    }
-
-    public void LandingTrigger()
-    {
-        playerAnimator.SetBool(isFalling, false);
-        playerAnimator.SetTrigger(Land);
-    }
-    
-    private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
-    {
-        yield return new WaitForSeconds(hitBoxPersistenceDuration);
-        Destroy(hitboxToDelete);
-    }
+    #region Movement
 
     private void Move()
     {
+        //Get input from A and D keys
         float XInput = Input.GetAxis("Horizontal");
 
+        //stop animation player when player is only just barely moving
         if (Mathf.Abs(XInput) > movementDeadzone)
         {
             playerRb.velocity = new Vector2(XInput * moveSpeed, playerRb.velocity.y);
             isMoving = true;
             switch (XInput)
             {
+                //facingDirection is used to decide what direction to send out attacks
                 case <= 0:
                     facingDirection = "left";
                     playerSpriteRenderer.flipX = true;
@@ -134,6 +116,7 @@ public class SCR_PlayerController : MonoBehaviour
                     break;
             }
 
+            //Starts walking animation
             if (!playerAnimator.GetBool(IsWalking))
             {
                 playerAnimator.SetBool(IsWalking, true);
@@ -141,6 +124,7 @@ public class SCR_PlayerController : MonoBehaviour
         }
         else
         {
+            //Starts idle animation
             isMoving = false;
             if (!playerAnimator.GetBool(IsWalking) && !playerAnimator.GetBool(IsRunning)) return;
             playerAnimator.SetBool(IsWalking, false);
@@ -148,6 +132,20 @@ public class SCR_PlayerController : MonoBehaviour
         }
     }
 
+    //Plays falling animation
+    public void FallingTrigger()
+    {
+        playerAnimator.SetBool(isFalling, true);
+    }
+
+    //Plays landing animation
+    public void LandingTrigger()
+    {
+        playerAnimator.SetBool(isFalling, false);
+        playerAnimator.SetTrigger(Land);
+    }
+    
+    //Handles jump logic
     private void JumpCheck()
     {
         if (isGrounded && Input.GetKeyDown(jumpButton))
@@ -156,6 +154,7 @@ public class SCR_PlayerController : MonoBehaviour
             playerAnimator.SetTrigger(Jump);
             playerRb.AddForce(transform.up * initialJumpForce, ForceMode2D.Impulse);
             isJumping = true;
+            //If the jump has not lasted too long, player can continue to hold space to go higher
             jumpCanContinue = true;
             //Resets jump timer to track how long jump has lasted
             jumpTimer = 0.0f;
@@ -174,7 +173,7 @@ public class SCR_PlayerController : MonoBehaviour
             }
             else
             {
-                //If jump has reached max time, this stops it
+                //If the jump has reached max duration, this stops it
                 jumpCanContinue = false;
             } 
         }
@@ -192,11 +191,13 @@ public class SCR_PlayerController : MonoBehaviour
         }
     }
 
-    private void SprintCheck()
+    //Handles sprinting logic
+    private void Sprint()
     {
         if(Input.GetKey(sprintButton) && isGrounded)
         {
             moveSpeed = sprintSpeed;
+            //Starts running animation
             if (!playerAnimator.GetBool(IsRunning) && isMoving)
             {
                 playerAnimator.SetBool(IsRunning, true);
@@ -204,13 +205,45 @@ public class SCR_PlayerController : MonoBehaviour
             }
         }
 
+        //Stops walking animation and starts walking animation
         if (Input.GetKey(sprintButton) || !isGrounded) return;
         moveSpeed = walkSpeed;
         if (!playerAnimator.GetBool(IsRunning) || !isMoving) return;
         playerAnimator.SetBool(IsRunning, false);
-        playerAnimator.SetBool(IsWalking, true);
+        //playerAnimator.SetBool(IsWalking, true);
     }
+    
+    #endregion
 
+    #region Combat
+
+    //Handles attack logic
+    private void Attack(string attackType)
+    {
+        Debug.Log("Attacking with type: " + attackType);
+        if (attackType != "lightAttack") return;
+        //Gets direction to choose an offset for attack direction
+        float attackPosOffset = facingDirection switch
+        {
+            "right" => 1.0f,
+            "left" => -1.0f,
+            _ => 0.0f
+        };
+
+        //Spawns attack hitbox at the offset location
+        Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
+        GameObject spawnedHitBox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);
+        //Starts timer to delete hitbox
+        StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
+    }
+    
+    //Handles deleting of hitbox
+    private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
+    {
+        yield return new WaitForSeconds(hitBoxPersistenceDuration);
+        Destroy(hitboxToDelete);
+    }
+    
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
@@ -219,11 +252,26 @@ public class SCR_PlayerController : MonoBehaviour
         Die();
     }
 
+    //Destroys player obj and brings up the game over screen
     public void Die()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         GameOverScreen.SetActive(true);
         Destroy(this.gameObject);
+    }
+
+    #endregion
+    
+    //Follow the player with the camera at a consistent z distance from them
+    private void CameraFollow()
+    {
+        Vector3 newCameraPos = new Vector3
+        {
+            z = cameraOBJ.transform.position.z,
+            x = this.gameObject.transform.position.x,
+            y = this.gameObject.transform.position.y
+        };
+        cameraOBJ.transform.position = newCameraPos;
     }
 }
