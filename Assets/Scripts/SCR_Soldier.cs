@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SCR_Soldier : MonoBehaviour
 {
@@ -20,8 +21,17 @@ public class SCR_Soldier : MonoBehaviour
         //Spawns in attack hitbox
         Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
         GameObject spawnedHitBox = Instantiate(basicAttackHb, HBSpawnPosition, Quaternion.identity);
+        spawnedHitBox.transform.parent = gameObject.transform;
+
+        StumbleForward(attackPosOffset, spawnedHitBox);
+        
         //Delete attack after a delay
         StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
+    }
+
+    private void StumbleForward(float attackPosOffset, GameObject spawnedHitBox)
+    { 
+        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(attackPosOffset * 10,0), ForceMode2D.Impulse);  
     }
     
     private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)

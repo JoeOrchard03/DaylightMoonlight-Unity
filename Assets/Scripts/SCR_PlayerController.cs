@@ -32,11 +32,17 @@ public class SCR_PlayerController : MonoBehaviour
     
     [Header("Attack values")]
     public GameObject lightAttackHb;
+    public GameObject lightAttackComboFinisherHb;
     public float lightAttackDamage;
+    public int maxLightAttackComboCount = 3;
+    public float nextComboInputMaxTime = 0.75f;
     [TooltipAttribute("Distance from the player the hit box is instantiated")]
     public float hitOriginDistance = 1.0f;
     [TooltipAttribute("How long the hitbox will stay spawned for")]
     public float hitBoxPersistenceDuration = 0.1f;
+    private int comboCount = 0;
+    private bool canCombo = false;
+    private bool readyToAttack = true;
 
     [Header("Jump values")]
     public float initialJumpForce;
@@ -64,11 +70,11 @@ public class SCR_PlayerController : MonoBehaviour
     public Animator playerAnimator;
 
     [Header("Camera variables")] 
-    public GameObject cameraOBJ;
+    public GameObject cameraObj;
     private bool cameraFollow = true;
     
     [Header("Misc variables")]
-    public GameObject GameOverScreen;
+    public GameObject gameOverScreen;
     private float startTime;
 
     private void Start()
@@ -84,9 +90,10 @@ public class SCR_PlayerController : MonoBehaviour
         Sprint();
         CameraFollow();
         HandleAnimations();
-        if(Input.GetKeyDown(lightAttackButton))
+        if(Input.GetKeyDown(lightAttackButton) && readyToAttack)
         {
-            Attack("lightAttack");
+            CheckComboCount();
+            //Attack("lightAttack");
         }
         if (cameraFollow)
         {
@@ -256,18 +263,73 @@ public class SCR_PlayerController : MonoBehaviour
 
     #region Combat
 
+    private void CheckComboCount()
+    {
+        readyToAttack = false;
+        comboCount++;
+        Debug.Log("combo count: " + comboCount);
+
+        if (comboCount <= maxLightAttackComboCount)
+        {
+            NewAttack(false);
+            Debug.Log("Keep attacking");
+        }
+        else
+        {
+            NewAttack(true);
+            Debug.Log("End attacking");
+        }
+    }
+    private void NewAttack(bool comboFinisher)
+    {
+        SpawnAttackHB(comboFinisher);
+    }
+
+    private void SpawnAttackHB(bool comboFinisher)
+    {
+        float attackPosOffset = facingDirection switch { "right" => 1.0f, "left" => -1.0f, _ => 0.0f };
+        Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
+        GameObject spawnedHitBox = Instantiate(comboFinisher ? lightAttackComboFinisherHb : lightAttackHb, HBSpawnPosition, Quaternion.identity);
+        //Starts timer to delete hitbox
+        StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
+    }
+    
+    private IEnumerator ComboInputTimer()
+    {
+        canCombo = true;
+        yield return new WaitForSeconds(nextComboInputMaxTime);
+        Debug.Log("Can no longer combo");
+        canCombo = false;
+        comboCount = 0;
+    }
+    
+    private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
+    {
+        yield return new WaitForSeconds(hitBoxPersistenceDuration);
+        Destroy(hitboxToDelete);
+        readyToAttack = true;
+        StartCoroutine(ComboInputTimer());
+    }
+    
     //Handles attack logic
     private void Attack(string attackType)
     {
-        if (attackType != "lightAttack") return;
-        //Gets direction to choose an offset for attack direction
+        //Gets the direction to choose an offset for attack direction
         float attackPosOffset = facingDirection switch
-        {
-            "right" => 1.0f,
-            "left" => -1.0f,
-            _ => 0.0f
-        };
+        { "right" => 1.0f, "left" => -1.0f, _ => 0.0f };
+        
+        comboCount += 1;
 
+        if (comboCount <= maxLightAttackComboCount)
+        {
+            Debug.Log("Can combo more");
+        }
+        else
+        {
+            Debug.Log("Reached end of combo");
+            
+        }
+        
         //Spawns attack hitbox at the offset location
         Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
         GameObject spawnedHitBox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);
@@ -276,11 +338,6 @@ public class SCR_PlayerController : MonoBehaviour
     }
     
     //Handles deleting of hitbox
-    private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
-    {
-        yield return new WaitForSeconds(hitBoxPersistenceDuration);
-        Destroy(hitboxToDelete);
-    }
     
     public void TakeDamage(float damage)
     {
@@ -295,7 +352,7 @@ public class SCR_PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        GameOverScreen.SetActive(true);
+        gameOverScreen.SetActive(true);
         Destroy(this.gameObject);
     }
 
@@ -306,10 +363,10 @@ public class SCR_PlayerController : MonoBehaviour
     {
         Vector3 newCameraPos = new Vector3
         {
-            z = cameraOBJ.transform.position.z,
+            z = cameraObj.transform.position.z,
             x = this.gameObject.transform.position.x,
             y = this.gameObject.transform.position.y
         };
-        cameraOBJ.transform.position = newCameraPos;
+        cameraObj.transform.position = newCameraPos;
     }
 }

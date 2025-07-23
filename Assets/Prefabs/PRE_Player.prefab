@@ -140,11 +140,14 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   lightAttackHb: {fileID: 7287187850623337726, guid: f7058faa935010249b5c6cb0bc5531c0, type: 3}
+  lightAttackComboFinisherHb: {fileID: 7287187850623337726, guid: f67adab49ed2f1a43b46582c453f21c5, type: 3}
   lightAttackDamage: 10
+  maxLightAttackComboCount: 3
+  nextComboInputMaxTime: 0.75
   hitOriginDistance: 1
   hitBoxPersistenceDuration: 0.1
-  initialJumpForce: 12
-  heldJumpForce: 4
+  initialJumpForce: 10
+  heldJumpForce: 3
   maxJumpDuration: 0.3
   sprintButton: 304
   jumpButton: 32
@@ -153,8 +156,8 @@ MonoBehaviour:
   isGrounded: 0
   playerSpriteRenderer: {fileID: 5744925949418452398}
   playerAnimator: {fileID: 3108970934884017415}
-  cameraOBJ: {fileID: 0}
-  GameOverScreen: {fileID: 0}
+  cameraObj: {fileID: 0}
+  gameOverScreen: {fileID: 0}
 --- !u!212 &5744925949418452398
 SpriteRenderer:
   m_ObjectHideFlags: 0
