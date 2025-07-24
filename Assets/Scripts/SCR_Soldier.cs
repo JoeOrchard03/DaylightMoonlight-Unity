@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class SCR_Soldier : MonoBehaviour
 {
     public GameObject basicAttackHb;
     public float hitBoxPersistenceDuration;
+    public Vector2 stumbleGoalPos;
 
     public void Attack(string attackDirection)
     {

@@ -16,18 +16,12 @@ public class SCR_GroundCheck : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (((1 << collision.gameObject.layer) & groundLayer) == 0) return;
-        Debug.Log("Grounded");
         playerScriptRef.isGrounded = true;
-        //Triggers landing animation after player becomes grounded
-        //playerScriptRef.LandingTrigger();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (((1 << collision.gameObject.layer) & groundLayer) == 0) return;
-        Debug.Log("Not grounded");
         playerScriptRef.isGrounded = false;
-        //Triggers falling animation after player is no longer grounded
-        //playerScriptRef.FallingTrigger();
     }
 }
