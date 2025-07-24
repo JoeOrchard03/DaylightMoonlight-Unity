@@ -33,17 +33,20 @@ public class SCR_PlayerController : MonoBehaviour
     [Header("Attack values")]
     public GameObject lightAttackHb;
     public GameObject lightAttackComboFinisherHb;
-    public float lightAttackDamage;
-    public int maxLightAttackComboCount = 3;
-    public float nextComboInputMaxTime = 0.75f;
     [TooltipAttribute("Distance from the player the hit box is instantiated")]
     public float hitOriginDistance = 1.0f;
     [TooltipAttribute("How long the hitbox will stay spawned for")]
     public float hitBoxPersistenceDuration = 0.1f;
-    private int comboCount = 0;
-    private bool canCombo = false;
-    private bool readyToAttack = true;
+    public bool readyToAttack = true;
 
+    [Header("Combo values")]
+    public int maxLightAttackComboCount = 3;
+    public float nextComboInputMaxTime = 0.75f;
+    public float attackCooldown = 0.5f;
+    public int comboCount = 0;
+    public bool canCombo = false;
+    private Coroutine comboCoroutine;
+    
     [Header("Jump values")]
     public float initialJumpForce;
     public float heldJumpForce;
@@ -265,22 +268,36 @@ public class SCR_PlayerController : MonoBehaviour
 
     private void CheckComboCount()
     {
+        if (!canCombo && comboCount > 0)
+        {
+            comboCount = 0;
+        }
+        
         readyToAttack = false;
         comboCount++;
-        Debug.Log("combo count: " + comboCount);
-
-        if (comboCount <= maxLightAttackComboCount)
+        Debug.Log("Current combo is " + comboCount);
+        
+        if (comboCount < maxLightAttackComboCount)
         {
-            NewAttack(false);
-            Debug.Log("Keep attacking");
+            Attack(false);
+
+            if (comboCoroutine != null)
+            {
+                StopCoroutine(comboCoroutine);
+            }
+            
+            comboCoroutine = StartCoroutine(ComboInputTimer());
         }
         else
         {
-            NewAttack(true);
-            Debug.Log("End attacking");
+            Attack(true);
+            comboCount = 0;
         }
+
+        StartCoroutine(AttackCooldown());
     }
-    private void NewAttack(bool comboFinisher)
+    
+    private void Attack(bool comboFinisher)
     {
         SpawnAttackHB(comboFinisher);
     }
@@ -289,52 +306,40 @@ public class SCR_PlayerController : MonoBehaviour
     {
         float attackPosOffset = facingDirection switch { "right" => 1.0f, "left" => -1.0f, _ => 0.0f };
         Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
-        GameObject spawnedHitBox = Instantiate(comboFinisher ? lightAttackComboFinisherHb : lightAttackHb, HBSpawnPosition, Quaternion.identity);
+        GameObject spawnedHitbox;
+        if (comboFinisher)
+        {
+            Debug.Log("Spawning combo finisher hitbox");
+            spawnedHitbox = Instantiate(lightAttackComboFinisherHb, HBSpawnPosition, Quaternion.identity);  
+        }
+        else
+        {
+            Debug.Log("Spawning regular hitbox");
+            spawnedHitbox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);  
+        }
         //Starts timer to delete hitbox
-        StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
+        StartCoroutine(HitBoxDeleteTimer(spawnedHitbox));
     }
     
     private IEnumerator ComboInputTimer()
     {
         canCombo = true;
         yield return new WaitForSeconds(nextComboInputMaxTime);
-        Debug.Log("Can no longer combo");
         canCombo = false;
         comboCount = 0;
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        readyToAttack = false;
+        yield return new WaitForSeconds(attackCooldown);
+        readyToAttack = true;
     }
     
     private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
     {
         yield return new WaitForSeconds(hitBoxPersistenceDuration);
         Destroy(hitboxToDelete);
-        readyToAttack = true;
-        StartCoroutine(ComboInputTimer());
-    }
-    
-    //Handles attack logic
-    private void Attack(string attackType)
-    {
-        //Gets the direction to choose an offset for attack direction
-        float attackPosOffset = facingDirection switch
-        { "right" => 1.0f, "left" => -1.0f, _ => 0.0f };
-        
-        comboCount += 1;
-
-        if (comboCount <= maxLightAttackComboCount)
-        {
-            Debug.Log("Can combo more");
-        }
-        else
-        {
-            Debug.Log("Reached end of combo");
-            
-        }
-        
-        //Spawns attack hitbox at the offset location
-        Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
-        GameObject spawnedHitBox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);
-        //Starts timer to delete hitbox
-        StartCoroutine(HitBoxDeleteTimer(spawnedHitBox));
     }
     
     //Handles deleting of hitbox
