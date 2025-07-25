@@ -23,7 +23,8 @@ public class SCR_PlayerController : MonoBehaviour
     [Tooltip("Deadzone stops the player from freezing when quickly changing directions")]
     public float movementDeadzone = 0.5f;
     private float moveSpeed;
-    private string facingDirection = "right";
+    public enum FacingDirection {Left, Right, Up, Down}
+    public FacingDirection facingDirection = FacingDirection.Right;
     private bool isMoving = false;
 
     [Header("Health values")]
@@ -37,14 +38,15 @@ public class SCR_PlayerController : MonoBehaviour
     public float hitOriginDistance = 1.0f;
     [TooltipAttribute("How long the hitbox will stay spawned for")]
     public float hitBoxPersistenceDuration = 0.1f;
-    public bool readyToAttack = true;
-
-    [Header("Combo values")]
     public int maxLightAttackComboCount = 3;
     public float nextComboInputMaxTime = 0.75f;
-    public float attackCooldown = 0.5f;
-    public int comboCount = 0;
-    public bool canCombo = false;
+    public float attackCooldown = 0.2f;
+    public float comboFinisherAttackCooldown = 0.5f;
+    
+    private bool readyToAttack = true;
+    private float attackPosOffset;
+    private int comboCount = 0;
+    private bool canCombo = false;
     private Coroutine comboCoroutine;
     
     [Header("Jump values")]
@@ -88,19 +90,18 @@ public class SCR_PlayerController : MonoBehaviour
 
     private void Update()
     {
+        SetFacingDirection();
         JumpCheck();
         Move();
         Sprint();
-        CameraFollow();
         HandleAnimations();
         if(Input.GetKeyDown(lightAttackButton) && readyToAttack)
         {
+            GetAttackOffset();
             CheckComboCount();
-            //Attack("lightAttack");
         }
         if (cameraFollow)
         {
-            //Follow the player with the camera
             CameraFollow();
         }
     }
@@ -153,6 +154,14 @@ public class SCR_PlayerController : MonoBehaviour
             }
         }
     }
+
+    private void SetFacingDirection()
+    {
+        if(Input.GetKey(KeyCode.A)){ facingDirection = FacingDirection.Left; }
+        else if(Input.GetKey(KeyCode.D)){ facingDirection = FacingDirection.Right; }
+        else if(Input.GetKey(KeyCode.W)){ facingDirection = FacingDirection.Up; }
+        else if(Input.GetKey(KeyCode.S)){ facingDirection = FacingDirection.Down; }
+    }
     
     private void Move()
     {
@@ -166,13 +175,10 @@ public class SCR_PlayerController : MonoBehaviour
             isMoving = true;
             switch (XInput)
             {
-                //facingDirection is used to decide what direction to send out attacks
                 case <= 0:
-                    facingDirection = "left";
                     playerSpriteRenderer.flipX = true;
                     break;
                 case >= 0:
-                    facingDirection = "right";
                     playerSpriteRenderer.flipX = false;
                     break;
             }
@@ -227,7 +233,7 @@ public class SCR_PlayerController : MonoBehaviour
             } 
         }
 
-        //Stops jump early
+        //Cancel jump if the player releases the key early
         if(Input.GetKeyUp(jumpButton))
         {
             jumpCanContinue = false;
@@ -266,61 +272,84 @@ public class SCR_PlayerController : MonoBehaviour
 
     #region Combat
 
+    private void GetAttackOffset()
+    {
+        //Gets the offset to positon the attack hitbox at
+        attackPosOffset = facingDirection switch
+        {
+            FacingDirection.Right => 1.0f,
+            FacingDirection.Left => -1.0f,
+            FacingDirection.Up => 2.0f,
+            FacingDirection.Down => -2.0f
+        };
+    }
+    
+    //Checks what the current combo is
     private void CheckComboCount()
     {
+        //If the player cannot combo anymore, reset it to 0
         if (!canCombo && comboCount > 0)
         {
             comboCount = 0;
         }
         
+        //Stops player inputting anymore attacks while handling the current one
         readyToAttack = false;
+        //Increment combo count
         comboCount++;
-        Debug.Log("Current combo is " + comboCount);
         
+        //If the combo has not reached the end, continue attack chain
         if (comboCount < maxLightAttackComboCount)
         {
-            Attack(false);
+            //Spawn the non-combo finisher version of the attack hitbox
+            SpawnAttackHb(false);
 
+            //If the combo timer is currently running, stop it
             if (comboCoroutine != null)
             {
                 StopCoroutine(comboCoroutine);
             }
             
+            //Start/reset the combo input timer
             comboCoroutine = StartCoroutine(ComboInputTimer());
+            //Start a quicker version of the attack cooldown
+            StartCoroutine(AttackCooldown(false));
         }
+        //If the combo has reached the end
         else
         {
-            Attack(true);
+            //Spawn the combo finisher of the attack hb
+            SpawnAttackHb(true);
+            //Reset the combo count
             comboCount = 0;
+            //Start a longer version of the attack cooldown
+            StartCoroutine(AttackCooldown(true));
         }
-
-        StartCoroutine(AttackCooldown());
-    }
-    
-    private void Attack(bool comboFinisher)
-    {
-        SpawnAttackHB(comboFinisher);
     }
 
-    private void SpawnAttackHB(bool comboFinisher)
+    //Handles spawning of the appropriate attack hitbox
+    private void SpawnAttackHb(bool comboFinisher)
     {
-        float attackPosOffset = facingDirection switch { "right" => 1.0f, "left" => -1.0f, _ => 0.0f };
-        Vector2 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
-        GameObject spawnedHitbox;
-        if (comboFinisher)
+        //Sets the location to spawn the attack hb
+        Vector2 HBSpawnPosition;
+        Quaternion HBSpawnRotation;
+        if (facingDirection == FacingDirection.Right || facingDirection == FacingDirection.Left)
         {
-            Debug.Log("Spawning combo finisher hitbox");
-            spawnedHitbox = Instantiate(lightAttackComboFinisherHb, HBSpawnPosition, Quaternion.identity);  
+            HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
+            HBSpawnRotation = Quaternion.identity;
         }
         else
         {
-            Debug.Log("Spawning regular hitbox");
-            spawnedHitbox = Instantiate(lightAttackHb, HBSpawnPosition, Quaternion.identity);  
+            HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, attackPosOffset);
+            HBSpawnRotation = Quaternion.Euler(0,0,90);
         }
+        //Instantiate the appropriate attack hb
+        GameObject spawnedHitbox = Instantiate(comboFinisher ? lightAttackComboFinisherHb : lightAttackHb, HBSpawnPosition, HBSpawnRotation);
         //Starts timer to delete hitbox
         StartCoroutine(HitBoxDeleteTimer(spawnedHitbox));
     }
     
+    //Timer to detect if the next input to continue the combo comes through in time
     private IEnumerator ComboInputTimer()
     {
         canCombo = true;
@@ -329,26 +358,30 @@ public class SCR_PlayerController : MonoBehaviour
         comboCount = 0;
     }
 
-    private IEnumerator AttackCooldown()
+    //Handles attack cooldowns
+    private IEnumerator AttackCooldown(bool comboFinisher)
     {
+        //Stops player inputting more attacks
         readyToAttack = false;
-        yield return new WaitForSeconds(attackCooldown);
+        //If the combo finisher was used, run longer cooldown
+        if (comboFinisher) { yield return new WaitForSeconds(comboFinisherAttackCooldown); }
+        //If the combo finisher was not used run a shorter cooldown
+        else { yield return new WaitForSeconds(attackCooldown); }
+        //Mark player as ready to attack once cooldown is over
         readyToAttack = true;
     }
     
+    //Handles deleting the attack hitboxes after a short delay
     private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
     {
         yield return new WaitForSeconds(hitBoxPersistenceDuration);
         Destroy(hitboxToDelete);
     }
     
-    //Handles deleting of hitbox
-    
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         if (!(currentHealth <= 0)) return;
-        Debug.Log("Player has died");
         Die();
     }
 

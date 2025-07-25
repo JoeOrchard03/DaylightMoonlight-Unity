@@ -1882,7 +1882,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2708506016956767706, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
       propertyPath: maxHealth
-      value: 200
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2708506016956767706, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
       propertyPath: playerRef
@@ -1977,6 +1977,10 @@ PrefabInstance:
       propertyPath: gameOverScreen
       value: 
       objectReference: {fileID: 1325678999}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: hitBoxPersistenceDuration
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6117404834861754333, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: m_Name
       value: PRE_Player
@@ -1999,15 +2003,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8086602541453679787, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8086602541453679787, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8086602541453679787, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8086602541453679787, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2369,8 +2373,8 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1909734572}
-  - {fileID: 1139901574}
   - {fileID: 1207101298}
+  - {fileID: 1139901574}
   - {fileID: 474283879}
   - {fileID: 231625563}
   - {fileID: 439572797}
