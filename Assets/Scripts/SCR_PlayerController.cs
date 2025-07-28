@@ -24,6 +24,8 @@ public class SCR_PlayerController : MonoBehaviour
     public float movementDeadzone = 0.5f;
     private float moveSpeed;
     public enum FacingDirection {Left, Right, Up, Down}
+    public enum DodgeDirection {Left, Right}
+    public DodgeDirection dodgeDirection = DodgeDirection.Right;
     public FacingDirection facingDirection = FacingDirection.Right;
     private bool isMoving = false;
 
@@ -42,7 +44,9 @@ public class SCR_PlayerController : MonoBehaviour
     public float nextComboInputMaxTime = 0.75f;
     public float attackCooldown = 0.2f;
     public float comboFinisherAttackCooldown = 0.5f;
-    
+
+    private Vector2 HBSpawnPosition;
+    private Quaternion HBSpawnRotation;
     private bool readyToAttack = true;
     private float attackPosOffset;
     private int comboCount = 0;
@@ -61,6 +65,7 @@ public class SCR_PlayerController : MonoBehaviour
     public KeyCode sprintButton;
     public KeyCode jumpButton;
     public KeyCode lightAttackButton;
+    public KeyCode dodgeButton = KeyCode.LeftControl;
 
     [Header("Objects")]
     public Rigidbody2D playerRb;
@@ -92,6 +97,7 @@ public class SCR_PlayerController : MonoBehaviour
     {
         SetFacingDirection();
         JumpCheck();
+        DodgeCheck();
         Move();
         Sprint();
         HandleAnimations();
@@ -161,6 +167,14 @@ public class SCR_PlayerController : MonoBehaviour
         else if(Input.GetKey(KeyCode.D)){ facingDirection = FacingDirection.Right; }
         else if(Input.GetKey(KeyCode.W)){ facingDirection = FacingDirection.Up; }
         else if(Input.GetKey(KeyCode.S)){ facingDirection = FacingDirection.Down; }
+    }
+
+    private void DodgeCheck()
+    {
+        if (Input.GetKeyDown(dodgeButton))
+        {
+            playerRb.AddForce();
+        }
     }
     
     private void Move()
@@ -280,7 +294,8 @@ public class SCR_PlayerController : MonoBehaviour
             FacingDirection.Right => 1.0f,
             FacingDirection.Left => -1.0f,
             FacingDirection.Up => 2.0f,
-            FacingDirection.Down => -2.0f
+            FacingDirection.Down => -2.0f,
+            _ => throw new ArgumentOutOfRangeException()
         };
     }
     
@@ -302,7 +317,7 @@ public class SCR_PlayerController : MonoBehaviour
         if (comboCount < maxLightAttackComboCount)
         {
             //Spawn the non-combo finisher version of the attack hitbox
-            SpawnAttackHb(false);
+            SetHbPosAndRot(false);
 
             //If the combo timer is currently running, stop it
             if (comboCoroutine != null)
@@ -319,7 +334,7 @@ public class SCR_PlayerController : MonoBehaviour
         else
         {
             //Spawn the combo finisher of the attack hb
-            SpawnAttackHb(true);
+            SetHbPosAndRot(true);
             //Reset the combo count
             comboCount = 0;
             //Start a longer version of the attack cooldown
@@ -327,24 +342,35 @@ public class SCR_PlayerController : MonoBehaviour
         }
     }
 
-    //Handles spawning of the appropriate attack hitbox
-    private void SpawnAttackHb(bool comboFinisher)
+    private void SetHbPosAndRot(bool comboFinisher)
     {
-        //Sets the location to spawn the attack hb
-        Vector2 HBSpawnPosition;
-        Quaternion HBSpawnRotation;
-        if (facingDirection == FacingDirection.Right || facingDirection == FacingDirection.Left)
+        switch (facingDirection)
         {
-            HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
-            HBSpawnRotation = Quaternion.identity;
+            case FacingDirection.Right:
+            case FacingDirection.Left:
+                //Set the hb spawn pos and rot adding the attack offset
+                HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
+                HBSpawnRotation = Quaternion.identity;
+                //Handle the spawning
+                SpawnAttackHb(HBSpawnPosition, HBSpawnRotation, comboFinisher);
+                break;
+            case FacingDirection.Up:
+            case FacingDirection.Down when isGrounded == false:
+                HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, attackPosOffset);
+                HBSpawnRotation = Quaternion.Euler(0,0,90);
+                SpawnAttackHb(HBSpawnPosition, HBSpawnRotation, comboFinisher);
+                break;
+            default:
+                Debug.Log("Cannot attack, may be trying to attack down while grounded?");
+                break;
         }
-        else
-        {
-            HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, attackPosOffset);
-            HBSpawnRotation = Quaternion.Euler(0,0,90);
-        }
+    }
+    
+    //Handles spawning of the appropriate attack hitbox
+    private void SpawnAttackHb(Vector2 hbSpawnPos, Quaternion hbSpawnRot, bool comboFinisher)
+    {
         //Instantiate the appropriate attack hb
-        GameObject spawnedHitbox = Instantiate(comboFinisher ? lightAttackComboFinisherHb : lightAttackHb, HBSpawnPosition, HBSpawnRotation);
+        GameObject spawnedHitbox = Instantiate(comboFinisher ? lightAttackComboFinisherHb : lightAttackHb, hbSpawnPos, hbSpawnRot);
         //Starts timer to delete hitbox
         StartCoroutine(HitBoxDeleteTimer(spawnedHitbox));
     }
