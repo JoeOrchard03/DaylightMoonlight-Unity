@@ -5,35 +5,46 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.Scripting.APIUpdating;
 using Debug = UnityEngine.Debug;
 
 public class SCR_PlayerController : MonoBehaviour
 {
-    private static readonly int IsRunning = Animator.StringToHash("IsRunning");
-    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
-    public static readonly int IsFalling = Animator.StringToHash("IsFalling");
-    private static readonly int IsJumping = Animator.StringToHash("IsJumping");
-    private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
-    private static readonly int Land = Animator.StringToHash("Land");
-
-    [Header("Movement values")]
+    [Header("Public Movement variables")]
     public float walkSpeed = 5f;
     public float sprintSpeed = 12f;
     [Tooltip("Deadzone stops the player from freezing when quickly changing directions")]
     public float movementDeadzone = 0.5f;
+    
+    [Header("Private Movement variables")]
     private float moveSpeed;
-    public enum FacingDirection {Left, Right, Up, Down}
-    public enum DodgeDirection {Left, Right}
-    public DodgeDirection dodgeDirection = DodgeDirection.Right;
-    public FacingDirection facingDirection = FacingDirection.Right;
+    private enum FacingDirection {Left, Right, Up, Down}
+    private enum DodgeDirection {Left, Right}
+    private DodgeDirection dodgeDirection = DodgeDirection.Right;
+    private FacingDirection facingDirection = FacingDirection.Right;
     private bool isMoving = false;
-
-    [Header("Health values")]
+    
+    [Header("Health variables")]
     public float maxHealth = 100f; 
     public float currentHealth;
+
+    [Header("Public Dodge variables")] 
+    public float IFrameDuration = 0.5f;
+    public float dodgeStrength = 10.0f;
+    public float dodgeDuration = 0.2f;
+    public float dodgeCooldownTime = 1.0f;
+    public LayerMask enemyLayer;
+    public LayerMask nothingLayer;
     
-    [Header("Attack values")]
+    [Header("Private Dodge variables")]
+    private bool canDodge = true;
+    private bool dodging = false;
+    private bool dodgedInAir = false;
+    private bool resetDodgeOnLand = false;
+    private bool playerInvincible = false;
+    
+    [Header("Public Attack variables")]
     public GameObject lightAttackHb;
     public GameObject lightAttackComboFinisherHb;
     [TooltipAttribute("Distance from the player the hit box is instantiated")]
@@ -45,6 +56,7 @@ public class SCR_PlayerController : MonoBehaviour
     public float attackCooldown = 0.2f;
     public float comboFinisherAttackCooldown = 0.5f;
 
+    [Header("Private Attack variables")]
     private Vector2 HBSpawnPosition;
     private Quaternion HBSpawnRotation;
     private bool readyToAttack = true;
@@ -53,10 +65,12 @@ public class SCR_PlayerController : MonoBehaviour
     private bool canCombo = false;
     private Coroutine comboCoroutine;
     
-    [Header("Jump values")]
+    [Header("Public Jump variables")]
     public float initialJumpForce;
     public float heldJumpForce;
     public float maxJumpDuration = 0.3f;
+    
+    [Header("Private Jump variables")]
     private bool jumpCanContinue = true;
     private float jumpTimer = 0.0f;
     private bool isJumping = false;
@@ -71,24 +85,36 @@ public class SCR_PlayerController : MonoBehaviour
     public Rigidbody2D playerRb;
 
     [Header("Ground check variables")]
+    [HideInInspector]
     public bool isGrounded = false;
-
     private bool isGroundedPrevFrame;
-
-    [Header("Animation variables")]
+    
+    [Header("Public Animation variables")]
     public SpriteRenderer playerSpriteRenderer;
     public Animator playerAnimator;
+    
+    [Header("Private Animator variables")]
+    private static readonly int IsRunning = Animator.StringToHash("IsRunning");
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+    public static readonly int IsFalling = Animator.StringToHash("IsFalling");
+    private static readonly int IsJumping = Animator.StringToHash("IsJumping");
+    private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
+    private static readonly int Land = Animator.StringToHash("Land");
 
     [Header("Camera variables")] 
     public GameObject cameraObj;
     private bool cameraFollow = true;
     
-    [Header("Misc variables")]
+    [Header("UI variables")]
     public GameObject gameOverScreen;
+    
+    [Header("Misc variables")]
+    private Color spriteRendererColor;
     private float startTime;
 
     private void Start()
     {
+        spriteRendererColor = GetComponent<SpriteRenderer>().color;
         moveSpeed = walkSpeed;
         currentHealth = maxHealth;
     }
@@ -97,7 +123,7 @@ public class SCR_PlayerController : MonoBehaviour
     {
         SetFacingDirection();
         JumpCheck();
-        DodgeCheck();
+        Dodge();
         Move();
         Sprint();
         HandleAnimations();
@@ -149,6 +175,8 @@ public class SCR_PlayerController : MonoBehaviour
                 //If the player just landed
                 if (!isGroundedPrevFrame && isGrounded)
                 {
+                    //Reset dodge cooldown if it reset while airborne
+                    if (resetDodgeOnLand) { canDodge = true; dodgedInAir = false; }
                     //Play landing anim
                     playerAnimator.SetTrigger(Land);
                 }
@@ -163,22 +191,69 @@ public class SCR_PlayerController : MonoBehaviour
 
     private void SetFacingDirection()
     {
-        if(Input.GetKey(KeyCode.A)){ facingDirection = FacingDirection.Left; }
-        else if(Input.GetKey(KeyCode.D)){ facingDirection = FacingDirection.Right; }
+        if(Input.GetKey(KeyCode.A)){ facingDirection = FacingDirection.Left; dodgeDirection = DodgeDirection.Left; }
+        else if(Input.GetKey(KeyCode.D)){ facingDirection = FacingDirection.Right; dodgeDirection = DodgeDirection.Right; }
         else if(Input.GetKey(KeyCode.W)){ facingDirection = FacingDirection.Up; }
         else if(Input.GetKey(KeyCode.S)){ facingDirection = FacingDirection.Down; }
     }
 
-    private void DodgeCheck()
+    private void Dodge()
     {
-        if (Input.GetKeyDown(dodgeButton))
+        if (!Input.GetKeyDown(dodgeButton) || !canDodge) return;
+        if (!isGrounded) { dodgedInAir = true; }
+        dodging = true;
+        playerInvincible = true;
+        canDodge = false;
+        Debug.Log("Attempting dodge");
+        Vector2 forceDirection;
+        switch (dodgeDirection)
         {
-            playerRb.AddForce();
+            case DodgeDirection.Left:
+                forceDirection = new Vector2(-1, 0);
+                break;
+            case DodgeDirection.Right:
+                forceDirection = new Vector2(1.0f, 0f);
+                break;
+            default:
+                Debug.LogError("DodgeDirection not being set properly");
+                forceDirection = Vector2.zero;
+                break;
         }
+            
+        Debug.Log("Dodging " + forceDirection);
+        playerRb.AddForce(forceDirection * dodgeStrength, ForceMode2D.Impulse);
+        StartCoroutine(DodgeDuration());
+        StartCoroutine(PlayerIFrameDuration());
+    }
+
+    private IEnumerator DodgeDuration()
+    {
+        yield return new WaitForSeconds(dodgeDuration);
+        dodging = false;
+        StartCoroutine(DodgeCooldownTimer());
+    }
+    
+    private IEnumerator DodgeCooldownTimer()
+    {
+        yield return new WaitForSeconds(dodgeCooldownTime);
+        if(isGrounded) {canDodge = true;}
+        else { resetDodgeOnLand = true; }
+    }
+
+    private IEnumerator PlayerIFrameDuration()
+    {
+        GetComponent<SpriteRenderer>().color = Color.blue;
+        GetComponent<CapsuleCollider2D>().excludeLayers = enemyLayer;
+        yield return new WaitForSeconds(IFrameDuration);
+        playerInvincible = false;
+        GetComponent<SpriteRenderer>().color = spriteRendererColor;
+        GetComponent<CapsuleCollider2D>().excludeLayers = nothingLayer;
     }
     
     private void Move()
     {
+        if(dodging) {return;}
+        
         //Get input from A and D keys
         float XInput = Input.GetAxis("Horizontal");
 
@@ -219,8 +294,6 @@ public class SCR_PlayerController : MonoBehaviour
         if (isGrounded && Input.GetKeyDown(jumpButton))
         {
             //Initial jump force
-            Debug.Log("jump animation being triggered");
-            // playerAnimator.SetBool(IsJumping, true);
             playerRb.AddForce(transform.up * initialJumpForce, ForceMode2D.Impulse);
             isJumping = true;
             //If the jump has not lasted too long, player can continue to hold space to go higher
@@ -406,6 +479,7 @@ public class SCR_PlayerController : MonoBehaviour
     
     public void TakeDamage(float damage)
     {
+        if(playerInvincible) {Debug.Log("Player invincible, no damage taken"); return;}
         currentHealth -= damage;
         if (!(currentHealth <= 0)) return;
         Die();

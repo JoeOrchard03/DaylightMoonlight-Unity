@@ -11,7 +11,6 @@ public class SCR_EnemyAttackBase : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (((1 << other.gameObject.layer) & playerLayer) == 0) return;
-        Debug.Log("player hit");
         other.gameObject.GetComponent<SCR_PlayerController>().TakeDamage(damage);
     }
 } 

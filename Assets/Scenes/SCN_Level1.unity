@@ -1897,6 +1897,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7287187850623337726, guid: 2f889bfb515ce9146b472cdc95e4abb2, type: 3}
     - target: {fileID: 3505788748124146924, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
+      propertyPath: StumbleDistanceMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505788748124146924, guid: 4f6cec390366c894990df4feefad97c8, type: 3}
       propertyPath: hitBoxPersistenceDuration
       value: 1
       objectReference: {fileID: 0}
@@ -1969,14 +1973,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1569378567684486573, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: cameraObj
       value: 
       objectReference: {fileID: 519420028}
     - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: dodgeDuration
+      value: 0.325
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: dodgeStrength
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: IFrameDuration
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: gameOverScreen
       value: 
       objectReference: {fileID: 1325678999}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: dodgeCooldownTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: enemyLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: hitBoxPersistenceDuration
       value: 0.1

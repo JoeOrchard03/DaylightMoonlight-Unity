@@ -9,6 +9,7 @@ public class SCR_Soldier : MonoBehaviour
     public GameObject basicAttackHb;
     public float hitBoxPersistenceDuration;
     public Vector2 stumbleGoalPos;
+    public float StumbleDistanceMultiplier = 5.0f;
 
     public void Attack(string attackDirection)
     {
@@ -33,7 +34,7 @@ public class SCR_Soldier : MonoBehaviour
 
     private void StumbleForward(float attackPosOffset, GameObject spawnedHitBox)
     { 
-        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(attackPosOffset * 10,0), ForceMode2D.Impulse);  
+        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(attackPosOffset * StumbleDistanceMultiplier,0), ForceMode2D.Impulse);  
     }
     
     private IEnumerator HitBoxDeleteTimer(GameObject hitboxToDelete)
