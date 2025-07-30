@@ -1,12 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Security.Cryptography;
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Analytics;
-using UnityEngine.Scripting.APIUpdating;
 using Debug = UnityEngine.Debug;
 
 public class SCR_PlayerController : MonoBehaviour
