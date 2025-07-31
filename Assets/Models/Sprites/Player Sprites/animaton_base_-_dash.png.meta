@@ -1,0 +1,553 @@
+fileFormatVersion: 2
+guid: d025c1b122b73a540a9fa842336044c0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6757546440588411294
+    second: animaton_base_-_dash_0
+  - first:
+      213: 3691508973653195294
+    second: animaton_base_-_dash_1
+  - first:
+      213: 8507521578055672029
+    second: animaton_base_-_dash_2
+  - first:
+      213: -6846077824730677196
+    second: animaton_base_-_dash_3
+  - first:
+      213: -1301038847734397382
+    second: animaton_base_-_dash_4
+  - first:
+      213: -1013755850982714693
+    second: animaton_base_-_dash_5
+  - first:
+      213: 1505617320684011321
+    second: animaton_base_-_dash_6
+  - first:
+      213: -4737804303547729052
+    second: animaton_base_-_dash_7
+  - first:
+      213: -4491964412567044810
+    second: animaton_base_-_dash_8
+  - first:
+      213: 4360086128549476856
+    second: animaton_base_-_dash_9
+  - first:
+      213: 4617031900777924823
+    second: animaton_base_-_dash_10
+  - first:
+      213: -9087695531471611823
+    second: animaton_base_-_dash_11
+  - first:
+      213: -3640351352528380948
+    second: animaton_base_-_dash_12
+  - first:
+      213: 1671278649563441320
+    second: animaton_base_-_dash_13
+  - first:
+      213: 3562590020162361403
+    second: animaton_base_-_dash_14
+  - first:
+      213: 9138973217593954531
+    second: animaton_base_-_dash_15
+  - first:
+      213: 1392192848490061493
+    second: animaton_base_-_dash_16
+  - first:
+      213: -6099738032105777795
+    second: animaton_base_-_dash_17
+  - first:
+      213: 306582666173571285
+    second: animaton_base_-_dash_18
+  - first:
+      213: 6109960500190642472
+    second: animaton_base_-_dash_19
+  - first:
+      213: -8839085627393559401
+    second: animaton_base_-_dash_20
+  - first:
+      213: -5644532894158195407
+    second: animaton_base_-_dash_21
+  - first:
+      213: -4583310286478515223
+    second: animaton_base_-_dash_22
+  - first:
+      213: 6640158090605771580
+    second: animaton_base_-_dash_23
+  - first:
+      213: -2245994261467626307
+    second: animaton_base_-_dash_24
+  - first:
+      213: -747772960987656160
+    second: animaton_base_-_dash_25
+  - first:
+      213: -2396922571503710927
+    second: animaton_base_-_dash_26
+  - first:
+      213: -2296546057077786813
+    second: animaton_base_-_dash_27
+  - first:
+      213: -1355969751353281306
+    second: animaton_base_-_dash_28
+  - first:
+      213: -3688963529866690561
+    second: animaton_base_-_dash_29
+  - first:
+      213: 5933429344629125512
+    second: animaton_base_-_dash_30
+  - first:
+      213: -4148094447489346068
+    second: animaton_base_-_dash_31
+  - first:
+      213: -1047384945432471520
+    second: animaton_base_-_dash_32
+  - first:
+      213: -5531720127399471608
+    second: animaton_base_-_dash_33
+  - first:
+      213: -1150995417761267331
+    second: animaton_base_-_dash_34
+  - first:
+      213: -4934272749486746066
+    second: animaton_base_-_dash_35
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: animaton_base_-_dash_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2496
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26eb587b05f5832a0800000000000000
+      internalID: -6757546440588411294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_1
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 2496
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1af3c36adfda3330800000000000000
+      internalID: 3691508973653195294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_2
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 2496
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd0aafaecc9c01670800000000000000
+      internalID: 8507521578055672029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_3
+      rect:
+        serializedVersion: 2
+        x: 2496
+        y: 2496
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 430cf309d78ddf0a0800000000000000
+      internalID: -6846077824730677196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1664
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a36cec9af08c1fde0800000000000000
+      internalID: -1301038847734397382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_5
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 1664
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb29335bc6a6ee1f0800000000000000
+      internalID: -1013755850982714693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_6
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1664
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93fbb0fd9f605e410800000000000000
+      internalID: 1505617320684011321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_7
+      rect:
+        serializedVersion: 2
+        x: 2496
+        y: 1664
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46b78bf7610ff3eb0800000000000000
+      internalID: -4737804303547729052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 832
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63dbe3d8a2659a1c0800000000000000
+      internalID: -4491964412567044810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_9
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 832
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f9bc42bb33228c30800000000000000
+      internalID: 4360086128549476856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_10
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 832
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d8c38a3d0ef21040800000000000000
+      internalID: 4617031900777924823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_11
+      rect:
+        serializedVersion: 2
+        x: 2496
+        y: 832
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 158dab3101502e180800000000000000
+      internalID: -9087695531471611823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cebdee67bbfda7dc0800000000000000
+      internalID: -3640351352528380948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a86ce3b313913710800000000000000
+      internalID: 1671278649563441320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animaton_base_-_dash_14
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 832
+        height: 832
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3811287fbcd07130800000000000000
+      internalID: 3562590020162361403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: dac4bfd6ced20e6479459326dbae79b4
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      animaton_base_-_dash_0: -6757546440588411294
+      animaton_base_-_dash_1: 3691508973653195294
+      animaton_base_-_dash_10: 4617031900777924823
+      animaton_base_-_dash_11: -9087695531471611823
+      animaton_base_-_dash_12: -3640351352528380948
+      animaton_base_-_dash_13: 1671278649563441320
+      animaton_base_-_dash_14: 3562590020162361403
+      animaton_base_-_dash_15: 9138973217593954531
+      animaton_base_-_dash_2: 8507521578055672029
+      animaton_base_-_dash_3: -6846077824730677196
+      animaton_base_-_dash_4: -1301038847734397382
+      animaton_base_-_dash_5: -1013755850982714693
+      animaton_base_-_dash_6: 1505617320684011321
+      animaton_base_-_dash_7: -4737804303547729052
+      animaton_base_-_dash_8: -4491964412567044810
+      animaton_base_-_dash_9: 4360086128549476856
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -99,6 +99,7 @@ public class SCR_PlayerController : MonoBehaviour
     private static readonly int IsJumping = Animator.StringToHash("IsJumping");
     private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
     private static readonly int Land = Animator.StringToHash("Land");
+    private static readonly int Dash = Animator.StringToHash("Dash");
 
     [Header("Camera variables")] 
     public GameObject cameraObj;
@@ -224,8 +225,8 @@ public class SCR_PlayerController : MonoBehaviour
                 forceDirection = Vector2.zero;
                 break;
         }
-            
-        Debug.Log("Dodging " + forceDirection);
+        
+        playerAnimator.SetTrigger(Dash);
         playerRb.AddForce(forceDirection * dodgeStrength, ForceMode2D.Impulse);
         StartCoroutine(DodgeDuration());
         StartCoroutine(PlayerIFrameDuration());
@@ -247,11 +248,9 @@ public class SCR_PlayerController : MonoBehaviour
 
     private IEnumerator PlayerIFrameDuration()
     {
-        GetComponent<SpriteRenderer>().color = Color.blue;
         GetComponent<CapsuleCollider2D>().excludeLayers = enemyLayer;
         yield return new WaitForSeconds(IFrameDuration);
         playerInvincible = false;
-        GetComponent<SpriteRenderer>().color = spriteRendererColor;
         GetComponent<CapsuleCollider2D>().excludeLayers = nothingLayer;
     }
     
