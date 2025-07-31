@@ -1990,6 +1990,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: heavyAttackHb
+      value: 
+      objectReference: {fileID: 7287187850623337726, guid: c08e943249256fb4f9f0e5c6af978da3, type: 3}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: IFrameDuration
       value: 0.75
       objectReference: {fileID: 0}
@@ -2006,8 +2010,20 @@ PrefabInstance:
       value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: heavyAttackButton
+      value: 324
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: heavyAttackWindUpDuration
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: hitBoxPersistenceDuration
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485066222014371643, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
+      propertyPath: lightAttackWindUpDuration
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6117404834861754333, guid: 4a1dfa2ac9bdbb94d8c31bb49703dbc5, type: 3}
       propertyPath: m_Name

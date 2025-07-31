@@ -41,13 +41,17 @@ public class SCR_PlayerController : MonoBehaviour
     [Header("Public Attack variables")]
     public GameObject lightAttackHb;
     public GameObject lightAttackComboFinisherHb;
+    public GameObject heavyAttackHb;
+    public float lightAttackWindUpDuration;
+    public float heavyAttackWindUpDuration;
     [TooltipAttribute("Distance from the player the hit box is instantiated")]
     public float hitOriginDistance = 1.0f;
     [TooltipAttribute("How long the hitbox will stay spawned for")]
     public float hitBoxPersistenceDuration = 0.1f;
     public int maxLightAttackComboCount = 3;
     public float nextComboInputMaxTime = 0.75f;
-    public float attackCooldown = 0.2f;
+    public float lightAttackCooldown = 0.2f;
+    public float heavyAttackCooldown = 0.75f;
     public float comboFinisherAttackCooldown = 0.5f;
 
     [Header("Private Attack variables")]
@@ -73,6 +77,7 @@ public class SCR_PlayerController : MonoBehaviour
     public KeyCode sprintButton;
     public KeyCode jumpButton;
     public KeyCode lightAttackButton;
+    public KeyCode heavyAttackButton;
     public KeyCode dodgeButton = KeyCode.LeftControl;
 
     [Header("Objects")]
@@ -125,6 +130,12 @@ public class SCR_PlayerController : MonoBehaviour
         {
             GetAttackOffset();
             CheckComboCount();
+        }
+
+        if (Input.GetKeyDown(heavyAttackButton) && readyToAttack)
+        {
+            GetAttackOffset();
+            HeavyAttack();
         }
         if (cameraFollow)
         {
@@ -384,32 +395,23 @@ public class SCR_PlayerController : MonoBehaviour
         if (comboCount < maxLightAttackComboCount)
         {
             //Spawn the non-combo finisher version of the attack hitbox
-            SetHbPosAndRot(false);
-
-            //If the combo timer is currently running, stop it
-            if (comboCoroutine != null)
-            {
-                StopCoroutine(comboCoroutine);
-            }
-            
-            //Start/reset the combo input timer
-            comboCoroutine = StartCoroutine(ComboInputTimer());
-            //Start a quicker version of the attack cooldown
-            StartCoroutine(AttackCooldown(false));
+            StartCoroutine(AttackWindup(lightAttackWindUpDuration, false, false));
         }
         //If the combo has reached the end
         else
         {
             //Spawn the combo finisher of the attack hb
-            SetHbPosAndRot(true);
-            //Reset the combo count
-            comboCount = 0;
-            //Start a longer version of the attack cooldown
-            StartCoroutine(AttackCooldown(true));
+            StartCoroutine(AttackWindup(lightAttackWindUpDuration, true, false));
         }
     }
 
-    private void SetHbPosAndRot(bool comboFinisher)
+    private void HeavyAttack()
+    {
+        readyToAttack = false;
+        StartCoroutine(AttackWindup(heavyAttackWindUpDuration, false, true));
+    }
+    
+    private void SetHbPosAndRot(bool comboFinisher, bool heavyAttack)
     {
         switch (facingDirection)
         {
@@ -419,13 +421,13 @@ public class SCR_PlayerController : MonoBehaviour
                 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(attackPosOffset, 0);
                 HBSpawnRotation = Quaternion.identity;
                 //Handle the spawning
-                SpawnAttackHb(HBSpawnPosition, HBSpawnRotation, comboFinisher);
+                SpawnAttackHb(HBSpawnPosition, HBSpawnRotation, comboFinisher, heavyAttack);
                 break;
             case FacingDirection.Up:
             case FacingDirection.Down when isGrounded == false:
                 HBSpawnPosition = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, attackPosOffset);
                 HBSpawnRotation = Quaternion.Euler(0,0,90);
-                SpawnAttackHb(HBSpawnPosition, HBSpawnRotation, comboFinisher);
+                SpawnAttackHb(HBSpawnPosition, HBSpawnRotation, comboFinisher, heavyAttack);
                 break;
             default:
                 Debug.Log("Cannot attack, may be trying to attack down while grounded?");
@@ -434,10 +436,10 @@ public class SCR_PlayerController : MonoBehaviour
     }
     
     //Handles spawning of the appropriate attack hitbox
-    private void SpawnAttackHb(Vector2 hbSpawnPos, Quaternion hbSpawnRot, bool comboFinisher)
+    private void SpawnAttackHb(Vector2 hbSpawnPos, Quaternion hbSpawnRot, bool comboFinisher, bool heavyAttack)
     {
         //Instantiate the appropriate attack hb
-        GameObject spawnedHitbox = Instantiate(comboFinisher ? lightAttackComboFinisherHb : lightAttackHb, hbSpawnPos, hbSpawnRot);
+        GameObject spawnedHitbox = heavyAttack ? Instantiate(heavyAttackHb, hbSpawnPos, hbSpawnRot) : Instantiate(comboFinisher ? lightAttackComboFinisherHb : lightAttackHb, hbSpawnPos, hbSpawnRot);
         //Starts timer to delete hitbox
         StartCoroutine(HitBoxDeleteTimer(spawnedHitbox));
     }
@@ -451,16 +453,41 @@ public class SCR_PlayerController : MonoBehaviour
         comboCount = 0;
     }
 
+    private IEnumerator AttackWindup(float windUpDuration, bool comboFinisher, bool heavyAttack)
+    {
+        playerSpriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(windUpDuration);
+        SetHbPosAndRot(comboFinisher, heavyAttack);
+        
+        if (!heavyAttack)
+        {
+            if (comboFinisher)
+            {
+                comboCount = 0;
+                StartCoroutine(AttackCooldown(comboFinisherAttackCooldown));
+            }
+            else
+            {
+                if (comboCoroutine != null) StopCoroutine(comboCoroutine);
+                comboCoroutine = StartCoroutine(ComboInputTimer());
+                StartCoroutine(AttackCooldown(lightAttackCooldown));
+            }
+        }
+        else
+        {
+            StartCoroutine(AttackCooldown(heavyAttackCooldown));
+        }
+
+        playerSpriteRenderer.color = spriteRendererColor;
+    }
+
     //Handles attack cooldowns
-    private IEnumerator AttackCooldown(bool comboFinisher)
+    private IEnumerator AttackCooldown(float cooldownDuration)
     {
         //Stops player inputting more attacks
         readyToAttack = false;
-        //If the combo finisher was used, run longer cooldown
-        if (comboFinisher) { yield return new WaitForSeconds(comboFinisherAttackCooldown); }
-        //If the combo finisher was not used run a shorter cooldown
-        else { yield return new WaitForSeconds(attackCooldown); }
-        //Mark player as ready to attack once cooldown is over
+        //Wait the appropriate amount of time based on attack used
+        yield return new WaitForSeconds(cooldownDuration);
         readyToAttack = true;
     }
     
