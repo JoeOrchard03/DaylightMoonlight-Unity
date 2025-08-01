@@ -79,6 +79,7 @@ public class SCR_PlayerController : MonoBehaviour
     public KeyCode lightAttackButton;
     public KeyCode heavyAttackButton;
     public KeyCode dodgeButton = KeyCode.LeftControl;
+    public KeyCode interactKey = KeyCode.F;
 
     [Header("Objects")]
     public Rigidbody2D playerRb;
