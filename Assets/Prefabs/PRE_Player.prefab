@@ -139,19 +139,36 @@ MonoBehaviour:
   movementDeadzone: 0.05
   maxHealth: 100
   currentHealth: 0
+  IFrameDuration: 0.75
+  dodgeStrength: 15
+  dodgeDuration: 0.4
+  dodgeCooldownTime: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  nothingLayer:
+    serializedVersion: 2
+    m_Bits: 0
   lightAttackHb: {fileID: 7287187850623337726, guid: f7058faa935010249b5c6cb0bc5531c0, type: 3}
   lightAttackComboFinisherHb: {fileID: 7287187850623337726, guid: f67adab49ed2f1a43b46582c453f21c5, type: 3}
-  lightAttackDamage: 10
-  maxLightAttackComboCount: 3
-  nextComboInputMaxTime: 0.75
+  heavyAttackHb: {fileID: 7287187850623337726, guid: c08e943249256fb4f9f0e5c6af978da3, type: 3}
+  lightAttackWindUpDuration: 0.05
+  heavyAttackWindUpDuration: 0.25
   hitOriginDistance: 1
   hitBoxPersistenceDuration: 0.1
+  maxLightAttackComboCount: 3
+  nextComboInputMaxTime: 0.75
+  lightAttackCooldown: 0.2
+  heavyAttackCooldown: 0.75
+  comboFinisherAttackCooldown: 0.5
   initialJumpForce: 10
   heldJumpForce: 3
   maxJumpDuration: 0.3
   sprintButton: 304
   jumpButton: 32
   lightAttackButton: 323
+  heavyAttackButton: 324
+  dodgeButton: 306
   playerRb: {fileID: 3914684752140900404}
   isGrounded: 0
   playerSpriteRenderer: {fileID: 5744925949418452398}

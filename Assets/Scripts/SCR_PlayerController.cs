@@ -236,6 +236,7 @@ public class SCR_PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(dodgeDuration);
         dodging = false;
+        playerRb.velocity = new Vector2(0, playerRb.velocity.y);    
         StartCoroutine(DodgeCooldownTimer());
     }
     
