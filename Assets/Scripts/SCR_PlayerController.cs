@@ -28,7 +28,7 @@ public class SCR_PlayerController : MonoBehaviour
     public float dodgeStrength = 10.0f;
     public float dodgeDuration = 0.2f;
     public float dodgeCooldownTime = 1.0f;
-    public LayerMask enemyLayer;
+    public string enemyLayerName;
     public LayerMask nothingLayer;
     
     [Header("Private Dodge variables")]
@@ -118,6 +118,7 @@ public class SCR_PlayerController : MonoBehaviour
         spriteRendererColor = GetComponent<SpriteRenderer>().color;
         moveSpeed = walkSpeed;
         currentHealth = maxHealth;
+        int enemyLayerIndex = LayerMask.NameToLayer("Enemy");
     }
 
     private void Update()
@@ -250,10 +251,11 @@ public class SCR_PlayerController : MonoBehaviour
 
     private IEnumerator PlayerIFrameDuration()
     {
-        GetComponent<CapsuleCollider2D>().excludeLayers = enemyLayer;
+        int enemyLayerIndex = LayerMask.NameToLayer(enemyLayerName);
+        Physics2D.IgnoreLayerCollision(gameObject.layer, enemyLayerIndex, true);
         yield return new WaitForSeconds(IFrameDuration);
         playerInvincible = false;
-        GetComponent<CapsuleCollider2D>().excludeLayers = nothingLayer;
+        Physics2D.IgnoreLayerCollision(gameObject.layer, enemyLayerIndex, false);
     }
     
     private void Move()

@@ -10,13 +10,24 @@ public class SCR_Interact : MonoBehaviour
 
     private List<Collider2D> colliders = new List<Collider2D>();
     public List<Collider2D> GetColliders () { return colliders; }
+    public GameObject objToInteractWith;
+    public Canvas promptCanvas;
     
     private void Start()
     {
+        //Get the interact key from the main player script to keep all the keybinds accessible
         InteractKey = gameObject.transform.root.GetComponent<SCR_PlayerController>().interactKey;
     }
-    
-    private void OnTriggerEnter2D(Collider2D other)
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(InteractKey) && objToInteractWith != null)
+        {
+            Debug.Log("Interacting with: " + objToInteractWith.name);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (!other.gameObject.CompareTag("Interactable")) { return;} 
         //If list of colliders does not contain the detected collider, add it to the list
@@ -24,13 +35,18 @@ public class SCR_Interact : MonoBehaviour
 
         if (colliders.Count > 1)
         {
-            FindClosestCollider();
+            objToInteractWith = FindClosestCollider();
+        }
+        else
+        {
+            objToInteractWith = other.gameObject;
         }
         
-        Debug.Log("Activate pick up prompt on nearby object");
-        
+        //Toggle interaction prompt
+        promptCanvas.enabled = true;
     }
 
+    //In case there are multiple colliders in range, this method finds the closest one
     private GameObject FindClosestCollider()
     {
         GameObject closestColliderOBJ;
@@ -39,7 +55,7 @@ public class SCR_Interact : MonoBehaviour
 
         for (int i = 0; i < colliders.Count; i++)
         {
-            float distance = Vector3.Distance(transform.position, colliders[i].transform.position);
+            float distance = Vector3.Distance(transform.root.position, colliders[i].transform.position);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -56,8 +72,7 @@ public class SCR_Interact : MonoBehaviour
             Debug.Log("Find closest collider failed");
             closestColliderOBJ = null;
         }
-
-        Debug.Log("Closest Collider is: " + closestColliderOBJ);
+        
         return closestColliderOBJ;
     }
 
@@ -77,5 +92,7 @@ public class SCR_Interact : MonoBehaviour
         {
             colliders.Remove(other);
         }
+
+        promptCanvas.enabled = false;
     }
 }
