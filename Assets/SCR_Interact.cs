@@ -24,6 +24,9 @@ public class SCR_Interact : MonoBehaviour
         if (Input.GetKeyDown(InteractKey) && objToInteractWith != null)
         {
             Debug.Log("Interacting with: " + objToInteractWith.name);
+            //Uses INT_Interactable interface to trigger the objects interact code
+            INT_Interactable interactable = objToInteractWith.GetComponent<INT_Interactable>();
+            interactable.Interact(this.transform.root.gameObject);
         }
     }
 

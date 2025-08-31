@@ -108,6 +108,9 @@ public class SCR_PlayerController : MonoBehaviour
     
     [Header("UI variables")]
     public GameObject gameOverScreen;
+
+    [Header("Item variables")] 
+    public int heldKeys;
     
     [Header("Misc variables")]
     private Color spriteRendererColor;
